@@ -1,15 +1,17 @@
 import "reflect-metadata";
+import * as dotenv from "dotenv";
 import * as express from "express";
 import { ApolloServer } from "apollo-server-express";
 import { schema } from "./schema";
 import { createConnection } from "typeorm";
 import * as cookieParser from "cookie-parser";
 import { verify } from "jsonwebtoken";
-import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "./constants";
 import { User } from "./entity/User";
 import { createTokens } from "./auth";
 
 const startServer = async () => {
+  dotenv.config();
+
   const app = express();
   const server = new ApolloServer({
     schema,
@@ -30,7 +32,7 @@ const startServer = async () => {
     }
 
     try {
-      const data = verify(accessToken, ACCESS_TOKEN_SECRET) as any;
+      const data = verify(accessToken, process.env.ACCESS_TOKEN_SECRET) as any;
       req.userId = data.userId;
       return next();
     } catch {}
@@ -42,7 +44,7 @@ const startServer = async () => {
     let data;
 
     try {
-      data = verify(refreshToken, REFRESH_TOKEN_SECRET) as any;
+      data = verify(refreshToken, process.env.REFRESH_TOKEN_SECRET) as any;
     } catch {
       return next();
     }
