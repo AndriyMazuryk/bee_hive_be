@@ -7,7 +7,7 @@ export const resolvers: IResolvers = {
       const post = await Post.findOne(postId);
       return post;
     },
-    getLastPostbyAuthor: async (authorId) => {
+    getLastPostByAuthor: async (authorId) => {
       //
     },
     getPostsByAuthor: async (authorId) => {
