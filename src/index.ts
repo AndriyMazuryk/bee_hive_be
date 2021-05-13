@@ -6,7 +6,7 @@ import { schema } from "./schema";
 import { createConnection } from "typeorm";
 import * as cookieParser from "cookie-parser";
 import { verify } from "jsonwebtoken";
-import { User } from "./entity/User";
+import { User } from "./entity";
 import { createTokens } from "./auth";
 
 const startServer = async () => {

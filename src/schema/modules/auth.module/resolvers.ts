@@ -1,7 +1,7 @@
 import { IResolvers } from "graphql-tools";
 import * as bcrypt from "bcryptjs";
-import { createTokens } from "../../auth";
-import { User } from "../../entity/User";
+import { createTokens } from "../../../auth";
+import { User } from "../../../entity";
 
 export const resolvers: IResolvers = {
   Mutation: {

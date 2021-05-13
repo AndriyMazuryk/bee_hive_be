@@ -1,9 +1,8 @@
 import { createApplication } from "graphql-modules";
-import { userModule } from "./user.module";
-import { authModule } from "./auth.module";
+import { userModule, authModule, postModule } from "./modules";
 
 const application = createApplication({
-  modules: [userModule, authModule],
+  modules: [userModule, authModule, postModule],
 });
 
 export const schema = application.createSchemaForApollo();

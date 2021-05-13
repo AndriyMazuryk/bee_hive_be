@@ -1,0 +1,25 @@
+scalar Date
+
+type Post {
+  id: ID!
+  text: String!
+  likes: Int!
+  dislikes: Int!
+  creationDate: Date!
+  lastModificationDate: Date!
+  author: User!
+}
+
+extend type Query {
+  getPostById(postId: ID!): Post
+  getLastPostByAuthor(authorId: ID!): Post
+  getPostsByAuthor(authorId: ID!) Post
+}
+
+extend type Mutation {
+  createPost(text: String): Boolean!
+  updatePost(text: String): Boolean!
+  removePost(postId: ID!): Boolean!
+  likePost(postId: ID!): Boolean!
+  dislikePost(postId: ID!): Boolean!
+}
