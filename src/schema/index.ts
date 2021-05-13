@@ -1,9 +1,8 @@
-import { makeExecutableSchema } from "graphql-tools";
+import { createApplication } from "graphql-modules";
+import { userModule } from "./user.module";
 
-import { typeDefs } from "./typeDefs";
-import { resolvers } from "./resolvers";
-
-export const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
+const application = createApplication({
+  modules: [userModule],
 });
+
+export const schema = application.createSchemaForApollo();

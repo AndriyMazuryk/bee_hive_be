@@ -1,7 +1,7 @@
-import * as bcrypt from "bcryptjs";
 import { IResolvers } from "graphql-tools";
-import { createTokens } from "../auth";
-import { User } from "../entity/User";
+import * as bcrypt from "bcryptjs";
+import { createTokens } from "../../auth";
+import { User } from "../../entity/User";
 
 export const resolvers: IResolvers = {
   Query: {
@@ -67,8 +67,6 @@ export const resolvers: IResolvers = {
       }
       user.count += 1;
       await user.save();
-
-      // resolvers.clearCookie("access-token");
 
       return true;
     },
