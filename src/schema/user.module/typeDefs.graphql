@@ -27,8 +27,4 @@ type Mutation {
   ): Boolean!
 
   removeUser(userId: ID!): Boolean!
-
-  login(email: String!, password: String!): User
-  logout: Boolean!
-  invalidateTokens: Boolean!
 }
