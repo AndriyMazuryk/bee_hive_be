@@ -12,12 +12,22 @@ type Query {
 }
 
 type Mutation {
-  register(
+  createUser(
     firstName: String!
     lastName: String!
     email: String!
     password: String!
   ): Boolean!
+
+  updateUser(
+    firstName: String
+    lastName: String
+    email: String
+    password: String
+  ): Boolean!
+
+  removeUser(userId: ID!): Boolean!
+
   login(email: String!, password: String!): User
   logout: Boolean!
   invalidateTokens: Boolean!
