@@ -21,10 +21,11 @@ export const resolvers: IResolvers = {
       _,
       { firstName, lastName, email, password, occupation, location, birthDate, userInfo }
     ) => {
-      const userExists = User.findOne({ where: { email }});
+      const userExists = await User.findOne({ where: { email }});
       if (userExists) {
-        return false;
+        return { success: false, message: "User with this email already exists!" };
       }
+      
       const hashedPassword = await bcrypt.hash(password, 10);
       await User.create({
         firstName,
@@ -37,7 +38,7 @@ export const resolvers: IResolvers = {
         userInfo
       }).save();
 
-      return true;
+      return { success: true, message: "User has been created!" };
     },
     updateUser: async (_, { firstName, lastName, email, password }) => {
       // validation

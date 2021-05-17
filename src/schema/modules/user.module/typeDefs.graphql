@@ -6,6 +6,11 @@ type User {
   password: String!
 }
 
+type Response {
+  success: Boolean!
+  message: String
+}
+
 type Query {
   getAllUsers: [User!]!
   me: User
@@ -21,7 +26,7 @@ type Mutation {
     location: String!
     birthDate: String!
     userInfo: String!
-  ): Boolean!
+  ): Response!
 
   updateUser(
     firstName: String
