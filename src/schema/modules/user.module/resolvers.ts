@@ -17,13 +17,20 @@ export const resolvers: IResolvers = {
     },
   },
   Mutation: {
-    createUser: async (_, { firstName, lastName, email, password }) => {
+    createUser: async (
+      _,
+      { firstName, lastName, email, password, occupation, location, birthDate, userInfo }
+    ) => {
       const hashedPassword = await bcrypt.hash(password, 10);
       await User.create({
         firstName,
         lastName,
         email,
         password: hashedPassword,
+        occupation,
+        location,
+        birthDate,
+        userInfo
       }).save();
 
       return true;
