@@ -4,16 +4,15 @@ import { User } from "../../../entity";
 
 export const resolvers: IResolvers = {
   Query: {
-    me: (_, __, { req }) => {
+    currentUser: async (_, __, { req }) => {
       if (!req.userId) {
         return null;
       }
 
-      return User.findOne(req.userId);
+      return await User.findOne(req.userId);
     },
     getAllUsers: async () => {
-      const users = await User.find();
-      return users;
+      return await User.find();
     },
   },
   Mutation: {

@@ -18,8 +18,8 @@ type Response {
 }
 
 type Query {
-  getAllUsers: [User!]!
-  me: User
+  getAllUsers: [User]!
+  currentUser: User
 }
 
 type Mutation {

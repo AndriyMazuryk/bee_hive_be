@@ -8,12 +8,12 @@ export const resolvers: IResolvers = {
     login: async (_, { email, password }, { res }) => {
       const user = await User.findOne({ where: { email } });
       if (!user) {
-        return null;
+        return false;
       }
 
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) {
-        return null;
+        return false;
       }
 
       const { accessToken, refreshToken } = createTokens(user);
@@ -25,7 +25,7 @@ export const resolvers: IResolvers = {
         expires: new Date(Date.now() + 60 * 15 * 1000),
       });
 
-      return user;
+      return true;
     },
     logout: (_, __, { res }) => {
       res.clearCookie("access-token");
