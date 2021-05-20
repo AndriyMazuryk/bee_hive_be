@@ -39,6 +39,10 @@ type Mutation {
     lastName: String
     email: String
     password: String
+    occupation: String
+    location: String
+    birthDate: String
+    userInfo: String
   ): Boolean!
 
   removeUser(userId: ID!): Boolean!

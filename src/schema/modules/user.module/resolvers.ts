@@ -18,13 +18,25 @@ export const resolvers: IResolvers = {
   Mutation: {
     createUser: async (
       _,
-      { firstName, lastName, email, password, occupation, location, birthDate, userInfo }
-    ) => {
-      const userExists = await User.findOne({ where: { email }});
-      if (userExists) {
-        return { success: false, message: "User with this email already exists!" };
+      {
+        firstName,
+        lastName,
+        email,
+        password,
+        occupation,
+        location,
+        birthDate,
+        userInfo,
       }
-      
+    ) => {
+      const userExists = await User.findOne({ where: { email } });
+      if (userExists) {
+        return {
+          success: false,
+          message: "User with this email already exists!",
+        };
+      }
+
       const hashedPassword = await bcrypt.hash(password, 10);
       await User.create({
         firstName,
@@ -34,14 +46,43 @@ export const resolvers: IResolvers = {
         occupation,
         location,
         birthDate,
-        userInfo
+        userInfo,
       }).save();
 
       return { success: true, message: "User has been created!" };
     },
-    updateUser: async (_, { firstName, lastName, email, password }) => {
-      // validation
-      // update and save
+    updateUser: async (
+      _,
+      {
+        firstName,
+        lastName,
+        email,
+        password,
+        occupation,
+        location,
+        birthDate,
+        userInfo,
+      },
+      {
+        req
+      }
+    ) => {
+      if (!req.userId) {
+        return null;
+      }
+
+      const user = await User.findOne(req.userId);
+      user.firstName = firstName;
+      user.lastName = lastName;
+      user.email = email;
+      user.password = password;
+      user.occupation = occupation;
+      user.location = location;
+      user.birthDate = birthDate;
+      user.userInfo = userInfo;
+
+      await user.save();
+
       return true;
     },
     removeUser: async (_, { userId }) => {
