@@ -68,10 +68,14 @@ export const resolvers: IResolvers = {
       }
     ) => {
       if (!req.userId) {
-        return null;
+        return false;
       }
 
       const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
       user.firstName = firstName;
       user.lastName = lastName;
       user.email = email;
