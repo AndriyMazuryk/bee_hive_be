@@ -1,6 +1,6 @@
-import { IResolvers } from "graphql-tools";
-import * as bcrypt from "bcryptjs";
-import { User } from "../../../entity";
+import { IResolvers } from 'graphql-tools';
+import * as bcrypt from 'bcryptjs';
+import { User } from '../../../entity';
 
 export const resolvers: IResolvers = {
   Query: {
@@ -33,7 +33,7 @@ export const resolvers: IResolvers = {
       if (userExists) {
         return {
           success: false,
-          message: "User with this email already exists!",
+          message: 'User with this email already exists!',
         };
       }
 
@@ -49,7 +49,7 @@ export const resolvers: IResolvers = {
         userInfo,
       }).save();
 
-      return { success: true, message: "User has been created!" };
+      return { success: true, message: 'User has been created!' };
     },
     updateUser: async (
       _,
@@ -63,9 +63,7 @@ export const resolvers: IResolvers = {
         birthDate,
         userInfo,
       },
-      {
-        req
-      }
+      { req }
     ) => {
       if (!req.userId) {
         return false;

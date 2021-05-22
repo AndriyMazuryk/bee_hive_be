@@ -1,26 +1,45 @@
-import { IResolvers } from "graphql-tools";
-import { User, Post } from "../../../entity";
+import { IResolvers } from 'graphql-tools';
+import { User, Post } from '../../../entity';
 
 export const resolvers: IResolvers = {
   Query: {
-    getPostById: async (postId) => {
-      const post = await Post.findOne(postId);
-      return post;
+    getAllPosts: async () => {
+      return await Post.find();
     },
-    getLastPostByAuthor: async (authorId) => {
+    getPostById: async (_, { postId }) => {
+      return await Post.findOne(postId);
+    },
+    getLastPostByAuthor: async (_, { authorId }) => {
       //
     },
-    getPostsByAuthor: async (authorId) => {
-      //
+    getPostsByAuthor: async (_, { authorId }) => {
+      const user = await User.findOne({
+        where: { id: authorId },
+        relations: ['posts'],
+      });
+      if (!user) {
+        return false;
+      }
+
+      return user.posts;
     },
   },
   Mutation: {
-    createPost: async (_, { text }) => {
-      // check if the user has authorization
+    createPost: async (_, { text }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
       // create post
-      await Post.create({
-        text,
-      }).save();
+      const post = new Post();
+      post.text = text;
+      post.author = user;
+      await post.save();
 
       return true;
     },
@@ -31,6 +50,10 @@ export const resolvers: IResolvers = {
     },
     removePost: async (_, { postId }) => {
       const post = await Post.findOne(postId);
+      if (!post) {
+        return false;
+      }
+
       await post.remove();
 
       return true;
@@ -40,6 +63,6 @@ export const resolvers: IResolvers = {
     },
     dislikePost: async (_, { postId }) => {
       //
-    }
+    },
   },
 };

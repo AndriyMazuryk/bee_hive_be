@@ -5,43 +5,52 @@ import {
   BaseEntity,
   UpdateDateColumn,
   CreateDateColumn,
-} from "typeorm";
+  OneToMany,
+} from 'typeorm';
+import { Post } from './Post';
 
-@Entity("users")
+@Entity('users')
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column("int", { default: 0 })
+  @Column('int', { default: 0 })
   count: number;
 
-  @Column("text")
+  @Column('text')
   firstName: string;
 
-  @Column("text")
+  @Column('text')
   lastName: string;
 
-  @Column("text")
+  @Column('text')
   email: string;
 
-  @Column("text")
+  @Column('text')
   password: string;
 
-  @Column("text")
+  @Column('text')
   occupation: string;
 
-  @Column("text")
+  @Column('text')
   location: string;
 
-  @Column("date")
+  @Column('date')
   birthDate: string;
 
-  @Column("text")
+  @Column('text')
   userInfo: string;
 
-  @CreateDateColumn({ type: "timestamptz", default: "NOW()" })
+  @CreateDateColumn({ type: 'timestamptz', default: 'NOW()' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamptz", onUpdate: "NOW()", nullable: true })
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    onUpdate: 'NOW()',
+    nullable: true,
+  })
   updatedAt: Date;
+
+  @OneToMany(() => Post, post => post.author)
+  posts: Post[];
 }

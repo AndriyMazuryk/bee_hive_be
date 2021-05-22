@@ -1,29 +1,38 @@
-import {Entity, PrimaryGeneratedColumn, Column, BaseEntity, OneToOne, JoinColumn} from "typeorm";
-import { User } from "./User";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BaseEntity,
+  ManyToOne,
+  UpdateDateColumn,
+  CreateDateColumn,
+} from 'typeorm';
+import { User } from './User';
 
 @Entity('posts')
 export class Post extends BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @PrimaryGeneratedColumn()
-    id: number;
+  @Column('text')
+  text: string;
 
-    @Column("text")
-    text: string;
+  @Column('int', { default: 0 })
+  likes: number;
 
-    @Column("int")
-    likes: number;
+  @Column('int', { default: 0 })
+  dislikes: number;
 
-    @Column("int")
-    dislikes: number;
+  @CreateDateColumn({ type: 'timestamptz', default: 'NOW()' })
+  createdAt: Date;
 
-    @Column("timestamptz")
-    creationDate: Date;
+  @UpdateDateColumn({
+    type: 'timestamptz',
+    onUpdate: 'NOW()',
+    nullable: true,
+  })
+  updatedAt: Date;
 
-    @Column("timestamptz")
-    lastModificationDate: Date;
-
-    @OneToOne(type => User)
-    @JoinColumn()
-    author: User
-
+  @ManyToOne(() => User, user => user.posts)
+  author: User;
 }

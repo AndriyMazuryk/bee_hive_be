@@ -1,7 +1,7 @@
-import { IResolvers } from "graphql-tools";
-import * as bcrypt from "bcryptjs";
-import { createTokens } from "../../../auth";
-import { User } from "../../../entity";
+import { IResolvers } from 'graphql-tools';
+import * as bcrypt from 'bcryptjs';
+import { createTokens } from '../../../auth';
+import { User } from '../../../entity';
 
 export const resolvers: IResolvers = {
   Mutation: {
@@ -18,18 +18,18 @@ export const resolvers: IResolvers = {
 
       const { accessToken, refreshToken } = createTokens(user);
 
-      res.cookie("refresh-token", refreshToken, {
+      res.cookie('refresh-token', refreshToken, {
         expires: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000),
       });
-      res.cookie("access-token", accessToken, {
+      res.cookie('access-token', accessToken, {
         expires: new Date(Date.now() + 60 * 15 * 1000),
       });
 
       return true;
     },
     logout: (_, __, { res }) => {
-      res.clearCookie("access-token");
-      res.clearCookie("refresh-token");
+      res.clearCookie('access-token');
+      res.clearCookie('refresh-token');
       return true;
     },
     invalidateTokens: async (_, __, { req }) => {

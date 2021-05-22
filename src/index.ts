@@ -1,13 +1,13 @@
-import "reflect-metadata";
-import * as dotenv from "dotenv";
-import * as express from "express";
-import { ApolloServer } from "apollo-server-express";
-import { schema } from "./schema";
-import { createConnection } from "typeorm";
-import * as cookieParser from "cookie-parser";
-import { verify } from "jsonwebtoken";
-import { User } from "./entity";
-import { createTokens } from "./auth";
+import 'reflect-metadata';
+import * as dotenv from 'dotenv';
+import * as express from 'express';
+import { ApolloServer } from 'apollo-server-express';
+import { schema } from './schema';
+import { createConnection } from 'typeorm';
+import * as cookieParser from 'cookie-parser';
+import { verify } from 'jsonwebtoken';
+import { User } from './entity';
+import { createTokens } from './auth';
 
 const startServer = async () => {
   dotenv.config();
@@ -24,8 +24,8 @@ const startServer = async () => {
   app.use(cookieParser());
 
   app.use(async (req: any, res, next) => {
-    const refreshToken = req.cookies["refresh-token"];
-    const accessToken = req.cookies["access-token"];
+    const refreshToken = req.cookies['refresh-token'];
+    const accessToken = req.cookies['access-token'];
 
     if (!refreshToken && !accessToken) {
       return next();
@@ -56,10 +56,10 @@ const startServer = async () => {
     }
 
     const tokens = createTokens(user);
-    res.cookie("access-token", tokens.accessToken, {
+    res.cookie('access-token', tokens.accessToken, {
       expires: new Date(Date.now() + 60 * 15 * 1000),
     });
-    res.cookie("refresh-token", tokens.refreshToken, {
+    res.cookie('refresh-token', tokens.refreshToken, {
       expires: new Date(Date.now() + 60 * 60 * 24 * 7 * 1000),
     });
     req.userId = user.id;
@@ -71,7 +71,7 @@ const startServer = async () => {
     app,
     cors: {
       credentials: true,
-      origin: "http://localhost:3000",
+      origin: 'http://localhost:3000',
     },
   });
 

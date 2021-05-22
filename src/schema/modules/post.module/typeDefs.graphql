@@ -11,9 +11,10 @@ type Post {
 }
 
 extend type Query {
+  getAllPosts: [Post]!
   getPostById(postId: ID!): Post
   getLastPostByAuthor(authorId: ID!): Post
-  getPostsByAuthor(authorId: ID!): Post
+  getPostsByAuthor(authorId: ID!): [Post]!
 }
 
 extend type Mutation {
