@@ -5,8 +5,8 @@ type Post {
   text: String!
   likes: Int!
   dislikes: Int!
-  creationDate: Date!
-  lastModificationDate: Date!
+  createdAt: Date!
+  updatedAt: Date!
   author: User!
 }
 
@@ -14,12 +14,12 @@ extend type Query {
   getAllPosts: [Post]!
   getPostById(postId: ID!): Post
   getLastPostByAuthor(authorId: ID!): Post
-  getPostsByAuthor(authorId: ID!): [Post]!
+  getPostsByAuthorId(authorId: ID!): [Post]!
 }
 
 extend type Mutation {
-  createPost(text: String): Boolean!
-  updatePost(text: String): Boolean!
+  createPost(text: String!): Boolean!
+  updatePost(postId: ID!, text: String!): Boolean!
   removePost(postId: ID!): Boolean!
   likePost(postId: ID!): Boolean!
   dislikePost(postId: ID!): Boolean!

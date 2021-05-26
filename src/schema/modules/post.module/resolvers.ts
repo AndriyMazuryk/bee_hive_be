@@ -12,7 +12,7 @@ export const resolvers: IResolvers = {
     getLastPostByAuthor: async (_, { authorId }) => {
       //
     },
-    getPostsByAuthor: async (_, { authorId }) => {
+    getPostsByAuthorId: async (_, { authorId }) => {
       const user = await User.findOne({
         where: { id: authorId },
         relations: ['posts'],
@@ -43,13 +43,36 @@ export const resolvers: IResolvers = {
 
       return true;
     },
-    updatePost: async (_, { text }) => {
-      // validation
-      // update and save
+    updatePost: async (_, { postId, text }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
+      const post = await Post.findOne({ where: { id: postId, author: user } });
+      if (!post) {
+        return false;
+      }
+
+      post.text = text;
+      await post.save();
+
       return true;
     },
-    removePost: async (_, { postId }) => {
-      const post = await Post.findOne(postId);
+    removePost: async (_, { postId }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
+      const post = await Post.findOne({ where: { id: postId, author: user } });
       if (!post) {
         return false;
       }
