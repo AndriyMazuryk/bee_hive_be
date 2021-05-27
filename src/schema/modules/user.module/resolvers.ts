@@ -93,5 +93,138 @@ export const resolvers: IResolvers = {
 
       return true;
     },
+    setFirstName: async (_, { firstName }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
+      user.firstName = firstName;
+      await user.save();
+
+      return true;
+    },
+    setLastName: async (_, { lastName }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
+      user.lastName = lastName;
+      await user.save();
+
+      return true;
+    },
+    setEmail: async (_, { email }, { req }) => {
+      if (!req.userId) {
+        return {
+          success: false,
+        };
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return {
+          success: false,
+        };
+      }
+
+      const emailIsAlreadyInUse = await User.findOne({ where: { email } });
+      if (emailIsAlreadyInUse) {
+        return {
+          success: false,
+          message: 'This email is already in use!',
+        };
+      }
+
+      user.email = email;
+      await user.save();
+
+      return true;
+    },
+    setPassword: async (_, { password }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      user.password = hashedPassword;
+      await user.save();
+
+      return true;
+    },
+    setOccupation: async (_, { occupation }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
+      user.occupation = occupation;
+      await user.save();
+
+      return true;
+    },
+    setLocation: async (_, { location }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
+      user.location = location;
+      await user.save();
+
+      return true;
+    },
+    setBirthDate: async (_, { birthDate }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
+      user.birthDate = birthDate;
+      await user.save();
+
+      return true;
+    },
+    setUserInfo: async (_, { userInfo }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return false;
+      }
+
+      user.userInfo = userInfo;
+      await user.save();
+
+      return true;
+    },
   },
 };
