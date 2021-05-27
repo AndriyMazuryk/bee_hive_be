@@ -21,7 +21,7 @@ export const resolvers: IResolvers = {
         return false;
       }
 
-      return user.posts;
+      return user.posts.sort((a, b) => b.id - a.id);
     },
   },
   Mutation: {
