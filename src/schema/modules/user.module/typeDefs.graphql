@@ -43,17 +43,7 @@ type Mutation {
     location: String
     birthDate: String
     userInfo: String
-  ): Boolean!
+  ): Response!
 
   removeUser(userId: ID!): Boolean!
-
-  setFirstName(firstName: String!): Boolean!
-  setLastName(lastName: String!): Boolean!
-  setEmail(email: String!): Response!
-  setPassword(password: String!): Boolean!
-  setOccupation(occupation: String!): Boolean!
-  setLocation(location: String!): Boolean!
-  setBirthDate(birthDate: String!): Boolean!
-  setUserInfo(userInfo: String!): Boolean!
-
 }
