@@ -32,15 +32,12 @@ export const resolvers: IResolvers = {
         return false;
       }
 
-      const wall = await Wall.findOne({
-        where: { id: user.wall.id },
-        relations: ['posts'],
+      const posts = await Post.find({
+        where: { wall: user.wall },
+        relations: ['author'],
       });
-      if (!wall) {
-        return false;
-      }
 
-      return wall.posts.sort((a, b) => b.id - a.id);
+      return posts.sort((a, b) => b.id - a.id);
     },
   },
   Mutation: {
