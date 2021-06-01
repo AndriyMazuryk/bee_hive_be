@@ -97,12 +97,20 @@ export const resolvers: IResolvers = {
         return false;
       }
 
-      const user = await User.findOne(req.userId);
+      const user = await User.findOne({
+        where: { id: req.userId },
+        relations: ['wall'],
+      });
       if (!user) {
         return false;
       }
 
-      const post = await Post.findOne({ where: { id: postId, author: user } });
+      const post = await Post.findOne({
+        where: [
+          { id: postId, author: user },
+          { id: postId, wall: user.wall },
+        ],
+      });
       if (!post) {
         return false;
       }
