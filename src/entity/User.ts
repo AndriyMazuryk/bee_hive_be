@@ -8,6 +8,7 @@ import {
   OneToOne,
   JoinColumn,
   OneToMany,
+  ManyToOne,
 } from 'typeorm';
 import { Post } from './Post';
 import { Wall } from './Wall';
@@ -60,4 +61,16 @@ export class User extends BaseEntity {
   @OneToOne(() => Wall, wall => wall.user)
   @JoinColumn()
   wall: Wall;
+
+  @ManyToOne(() => User, user => user.subscriptions)
+  subscription: User;
+
+  @OneToMany(() => User, user => user.subscription)
+  subscriptions: User[];
+
+  @ManyToOne(() => User, user => user.subscribers)
+  subscriber: User;
+
+  @OneToMany(() => User, user => user.subscriber)
+  subscribers: User[];
 }

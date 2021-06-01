@@ -17,6 +17,28 @@ export const resolvers: IResolvers = {
     getUserById: async (_, { userId }) => {
       return await User.findOne(userId);
     },
+    getSubscribersByUserId: async (_, { userId }) => {
+      const user = await User.findOne({
+        where: { id: userId },
+        relations: ['subscribers'],
+      });
+      if (!user) {
+        return false;
+      }
+
+      return user.subscribers;
+    },
+    getSubscriptionsByUserId: async (_, { userId }) => {
+      const user = await User.findOne({
+        where: { id: userId },
+        relations: ['subscriptions'],
+      });
+      if (!user) {
+        return false;
+      }
+
+      return user.subscriptions;
+    },
   },
   Mutation: {
     createUser: async (
@@ -129,6 +151,35 @@ export const resolvers: IResolvers = {
     removeUser: async (_, { userId }) => {
       const user = await User.findOne(userId);
       await user.remove();
+
+      return true;
+    },
+    subscribeToUser: async (_, { userIdToSubscribe }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+
+      const user = await User.findOne({
+        where: { id: req.userId },
+        relations: ['subscriptions'],
+      });
+      if (!user) {
+        return false;
+      }
+
+      const userToSubscribe = await User.findOne({
+        where: { id: userIdToSubscribe },
+        relations: ['subscribers'],
+      });
+      if (!userToSubscribe) {
+        return false;
+      }
+
+      user.subscriptions.push(userToSubscribe);
+      await user.save();
+
+      userToSubscribe.subscribers.push(user);
+      await userToSubscribe.save();
 
       return true;
     },

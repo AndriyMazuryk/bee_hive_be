@@ -21,6 +21,8 @@ type Query {
   getAllUsers: [User]!
   currentUser: User
   getUserById(userId: ID!): User
+  getSubscribersByUserId(userId: ID!): [User]!
+  getSubscriptionsByUserId(userId: ID!): [User]!
 }
 
 type Mutation {
@@ -47,4 +49,6 @@ type Mutation {
   ): Response!
 
   removeUser(userId: ID!): Boolean!
+
+  subscribeToUser(userIdToSubscribe: ID!): Boolean!
 }
