@@ -14,6 +14,9 @@ export const resolvers: IResolvers = {
     getAllUsers: async () => {
       return await User.find();
     },
+    getUserById: async (_, { userId }) => {
+      return await User.findOne(userId);
+    },
   },
   Mutation: {
     createUser: async (
