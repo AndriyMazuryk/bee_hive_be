@@ -1,5 +1,5 @@
 import { IResolvers } from 'graphql-tools';
-import { User, Post } from '../../../entity';
+import { User, Post, Wall } from '../../../entity';
 
 export const resolvers: IResolvers = {
   Query: {
@@ -23,9 +23,28 @@ export const resolvers: IResolvers = {
 
       return user.posts.sort((a, b) => b.id - a.id);
     },
+    getWallPostsByUserId: async (_, { userId }) => {
+      const user = await User.findOne({
+        where: { id: userId },
+        relations: ['wall'],
+      });
+      if (!user || !user.wall) {
+        return false;
+      }
+
+      const wall = await Wall.findOne({
+        where: { id: user.wall.id },
+        relations: ['posts'],
+      });
+      if (!wall) {
+        return false;
+      }
+
+      return wall.posts.sort((a, b) => b.id - a.id);
+    },
   },
   Mutation: {
-    createPost: async (_, { text }, { req }) => {
+    createPost: async (_, { recipientId, text }, { req }) => {
       if (!req.userId) {
         return false;
       }
@@ -35,10 +54,24 @@ export const resolvers: IResolvers = {
         return false;
       }
 
+      const recipient = await User.findOne({
+        where: { id: recipientId },
+        relations: ['wall'],
+      });
+      if (!recipient || !recipient.wall) {
+        return false;
+      }
+
+      const wall = await Wall.findOne({ where: { id: recipient.wall.id } });
+      if (!wall) {
+        return false;
+      }
+
       // create post
       const post = new Post();
       post.text = text;
       post.author = user;
+      post.wall = wall;
       await post.save();
 
       return true;

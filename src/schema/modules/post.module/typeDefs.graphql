@@ -15,10 +15,11 @@ extend type Query {
   getPostById(postId: ID!): Post
   getLastPostByAuthor(authorId: ID!): Post
   getPostsByAuthorId(authorId: ID!): [Post]!
+  getWallPostsByUserId(userId: ID!): [Post]!
 }
 
 extend type Mutation {
-  createPost(text: String!): Boolean!
+  createPost(recipientId: ID!, text: String!): Boolean!
   updatePost(postId: ID!, text: String!): Boolean!
   removePost(postId: ID!): Boolean!
   likePost(postId: ID!): Boolean!

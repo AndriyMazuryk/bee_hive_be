@@ -5,9 +5,12 @@ import {
   BaseEntity,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToOne,
+  JoinColumn,
   OneToMany,
 } from 'typeorm';
 import { Post } from './Post';
+import { Wall } from './Wall';
 
 @Entity('users')
 export class User extends BaseEntity {
@@ -53,4 +56,8 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Post, post => post.author)
   posts: Post[];
+
+  @OneToOne(() => Wall, wall => wall.user)
+  @JoinColumn()
+  wall: Wall;
 }

@@ -8,6 +8,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 import { User } from './User';
+import { Wall } from './Wall';
 
 @Entity('posts')
 export class Post extends BaseEntity {
@@ -35,4 +36,7 @@ export class Post extends BaseEntity {
 
   @ManyToOne(() => User, user => user.posts)
   author: User;
+
+  @ManyToOne(() => Wall, wall => wall.posts)
+  wall: Wall;
 }

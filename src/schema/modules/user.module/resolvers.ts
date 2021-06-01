@@ -1,6 +1,6 @@
 import { IResolvers } from 'graphql-tools';
 import * as bcrypt from 'bcryptjs';
-import { User } from '../../../entity';
+import { User, Wall } from '../../../entity';
 
 export const resolvers: IResolvers = {
   Query: {
@@ -41,7 +41,7 @@ export const resolvers: IResolvers = {
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
-      await User.create({
+      const user = await User.create({
         firstName,
         lastName,
         email,
@@ -50,6 +50,10 @@ export const resolvers: IResolvers = {
         location,
         birthDate,
         userInfo,
+      }).save();
+
+      await Wall.create({
+        user,
       }).save();
 
       return { success: true, message: 'User has been created!' };
