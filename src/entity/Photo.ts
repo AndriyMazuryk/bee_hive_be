@@ -49,6 +49,6 @@ export class Photo extends BaseEntity {
   @ManyToOne(() => User, user => user.photos)
   user: User;
 
-  @OneToOne(() => User, user => user.avatar)
-  avatar: User;
+  @OneToOne(() => User, owner => owner.avatar)
+  owner: User;
 }

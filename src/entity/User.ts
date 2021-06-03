@@ -62,7 +62,7 @@ export class User extends BaseEntity {
   @OneToMany(() => Photo, photo => photo.user)
   photos: Photo[];
 
-  @OneToOne(() => Photo, avatar => avatar.user)
+  @OneToOne(() => Photo, avatar => avatar.owner)
   @JoinColumn()
   avatar: Photo;
 
