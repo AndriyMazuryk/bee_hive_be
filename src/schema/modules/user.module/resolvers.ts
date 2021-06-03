@@ -189,6 +189,10 @@ export const resolvers: IResolvers = {
         return false;
       }
 
+      if (user.id === userToSubscribe.id) {
+        return false;
+      }
+
       user.subscriptions.push(userToSubscribe);
       await user.save();
 
