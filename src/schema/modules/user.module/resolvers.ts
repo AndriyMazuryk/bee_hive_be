@@ -9,13 +9,19 @@ export const resolvers: IResolvers = {
         return null;
       }
 
-      return await User.findOne(req.userId);
+      return await User.findOne({
+        where: { id: req.userId },
+        relations: ['photos', 'avatar'],
+      });
     },
     getAllUsers: async () => {
       return await User.find();
     },
     getUserById: async (_, { userId }) => {
-      return await User.findOne(userId);
+      return await User.findOne({
+        where: { id: userId },
+        relations: ['photos', 'avatar'],
+      });
     },
     getSubscribersByUserId: async (_, { userId }) => {
       const user = await User.findOne({

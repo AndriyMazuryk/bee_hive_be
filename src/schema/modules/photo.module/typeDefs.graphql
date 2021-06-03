@@ -15,5 +15,5 @@ extend type Query {
 }
 
 extend type Mutation {
-  uploadPhoto(file: Upload!): Photo!
+  uploadPhoto(file: Upload!, avatar: Boolean): Photo!
 }

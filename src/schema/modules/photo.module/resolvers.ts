@@ -38,7 +38,18 @@ export const resolvers: IResolvers = {
     },
   },
   Mutation: {
-    uploadPhoto: async (_, { file }) => {
+    uploadPhoto: async (_, { file, avatar }, { req }) => {
+      if (!req.userId) {
+        return false;
+      }
+      const user = await User.findOne({
+        where: { id: req.userId },
+        relations: ['photos', 'avatar'],
+      });
+      let isAvatar = false;
+      if (avatar) {
+        isAvatar = true;
+      }
       const { createReadStream, filename, mimetype, encoding } = await file;
 
       const filenameWithUuid = `${uuid()}-${filename}`;
@@ -50,12 +61,18 @@ export const resolvers: IResolvers = {
         stream
           .pipe(fs.createWriteStream(pathName))
           .on('finish', async () => {
-            await Photo.create({
+            const photo = await Photo.create({
               filename: filenameWithUuid,
               encoding,
               mimetype,
               location,
+              isAvatar,
             }).save();
+            user.photos.push(photo);
+            if (isAvatar) {
+              user.avatar = photo;
+            }
+            await user.save();
             resolve({
               success: true,
               message: 'Successfully Uploaded',

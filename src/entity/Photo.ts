@@ -6,9 +6,9 @@ import {
   ManyToOne,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToOne,
 } from 'typeorm';
 import { User } from './User';
-import { Wall } from './Wall';
 
 @Entity('photos')
 export class Photo extends BaseEntity {
@@ -27,6 +27,9 @@ export class Photo extends BaseEntity {
   @Column('text')
   location: string;
 
+  @Column('boolean', { default: false })
+  isAvatar: boolean;
+
   @Column('int', { default: 0 })
   likes: number;
 
@@ -43,9 +46,9 @@ export class Photo extends BaseEntity {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => User, user => user.posts)
-  author: User;
+  @ManyToOne(() => User, user => user.photos)
+  user: User;
 
-  @ManyToOne(() => Wall, wall => wall.posts)
-  wall: Wall;
+  @OneToOne(() => User, user => user.avatar)
+  avatar: User;
 }
