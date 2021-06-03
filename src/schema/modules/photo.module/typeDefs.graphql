@@ -1,0 +1,19 @@
+scalar Upload
+
+type Photo {
+  success: String!
+  message: String!
+  filename: String
+  mimetype: String
+  encoding: String
+  location: String
+}
+
+extend type Query {
+  getAllPhotoLocations: [String]!
+  getPhotoByUserId(userId: ID!): Photo
+}
+
+extend type Mutation {
+  uploadPhoto(file: Upload!): Photo!
+}

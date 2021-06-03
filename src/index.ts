@@ -16,6 +16,10 @@ const startServer = async () => {
   const server = new ApolloServer({
     schema,
     context: ({ req, res }: any) => ({ req, res }),
+    uploads: {
+      maxFieldSize: 10000000, // 10 MB
+      maxFiles: 20,
+    },
   });
   await server.start();
 
@@ -74,6 +78,8 @@ const startServer = async () => {
       origin: 'http://localhost:3000',
     },
   });
+
+  app.use(express.static('public'));
 
   await new Promise(() =>
     app.listen({ port: 4000 }, () =>
