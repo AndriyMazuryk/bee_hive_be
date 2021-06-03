@@ -10,6 +10,7 @@ type User {
   userInfo: String!
   createdAt: String!
   updatedAt: String
+  avatar: Photo
 }
 
 type Response {

@@ -9,10 +9,18 @@ export const resolvers: IResolvers = {
         return null;
       }
 
-      return await User.findOne({
+      const user = await User.findOne({
         where: { id: req.userId },
-        relations: ['photos', 'avatar'],
+        relations: ['avatar', 'photos'],
       });
+      if (!user) {
+        return false;
+      }
+      // TODO add default avatar
+      // if (!user.avatar) {
+      //   return false;
+      // }
+      return user;
     },
     getAllUsers: async () => {
       return await User.find();
