@@ -36,6 +36,12 @@ export const resolvers: IResolvers = {
         where: { wall: user.wall },
         relations: ['author'],
       });
+      if (!posts) {
+        return false;
+      }
+      if (posts.length < 1) {
+        return [];
+      }
 
       return posts.sort((a, b) => b.id - a.id);
     },
