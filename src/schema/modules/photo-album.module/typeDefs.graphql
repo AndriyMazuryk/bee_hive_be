@@ -7,6 +7,10 @@ type PhotoAlbum {
   photos: [Photo]!
 }
 
+extend type Query {
+  getPhotoAlbumsByUserId(userId: ID!): [PhotoAlbum]!
+}
+
 extend type Mutation {
   createPhotoAlbum(title: String!, description: String): Response!
   updatePhotoAlbum(

@@ -3,7 +3,23 @@ import { PhotoAlbum, User } from '../../../entity';
 import { response } from '../../../utils';
 
 export const resolvers: IResolvers = {
-  Query: {},
+  Query: {
+    getPhotoAlbumsByUserId: async (_, { userId }) => {
+      if (!userId) {
+        return response(false, 'Invalid user ID!');
+      }
+
+      const user = await User.findOne({
+        where: { id: userId },
+        relations: ['photoAlbums'],
+      });
+      if (!user) {
+        return response(false, 'There is no user with this ID!');
+      }
+
+      return user.photoAlbums.sort((a, b) => b.id - a.id);
+    },
+  },
   Mutation: {
     createPhotoAlbum: async (_, { title, description }, { req }) => {
       if (!req.userId) {
