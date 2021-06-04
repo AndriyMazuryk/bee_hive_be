@@ -1,0 +1,8 @@
+type PhotoAlbum {
+  id: ID!
+  title: String!
+  description: String!
+  createdAt: String!
+  updatedAt: String
+  photos: [Photo]!
+}
