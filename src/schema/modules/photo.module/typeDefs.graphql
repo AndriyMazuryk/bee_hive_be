@@ -1,17 +1,18 @@
 type Photo {
-  success: String!
-  message: String!
-  filename: String
-  mimetype: String
-  encoding: String
-  location: String
+  id: ID!
+  filename: String!
+  mimetype: String!
+  encoding: String!
+  location: String!
+  createdAt: String!
+  updatedAt: String
 }
 
 extend type Query {
   getAllPhotoLocations: [String]!
-  getPhotosByUserId(userId: ID!): Photo
+  getPhotosByUserId(userId: ID!): [Photo]!
 }
 
 extend type Mutation {
-  uploadPhoto(file: Upload!, avatar: Boolean): Photo!
+  uploadPhoto(file: Upload!, avatar: Boolean): Response!
 }

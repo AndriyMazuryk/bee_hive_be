@@ -1,5 +1,5 @@
 import { IResolvers } from 'graphql-tools';
-import { User, Post, Wall, Photo } from '../../../entity';
+import { User, Photo } from '../../../entity';
 import * as fs from 'fs';
 import * as path from 'path';
 import { v4 as uuid } from 'uuid';
