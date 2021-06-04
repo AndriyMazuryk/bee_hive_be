@@ -53,10 +53,6 @@ export const resolvers: IResolvers = {
             resolve({
               success: true,
               message: 'Successfully Uploaded',
-              mimetype,
-              filename: filenameWithUuid,
-              encoding,
-              location,
             });
           })
           .on('error', err => {
