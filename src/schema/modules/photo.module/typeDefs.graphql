@@ -1,5 +1,3 @@
-scalar Upload
-
 type Photo {
   success: String!
   message: String!
@@ -11,7 +9,7 @@ type Photo {
 
 extend type Query {
   getAllPhotoLocations: [String]!
-  getPhotoByUserId(userId: ID!): Photo
+  getPhotosByUserId(userId: ID!): Photo
 }
 
 extend type Mutation {
