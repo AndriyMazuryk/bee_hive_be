@@ -9,4 +9,5 @@ type PhotoAlbum {
 
 extend type Mutation {
   createPhotoAlbum(title: String!, description: String): Response!
+  removePhotoAlbum(photoAlbumId: ID!): Response!
 }

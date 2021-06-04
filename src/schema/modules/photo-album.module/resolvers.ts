@@ -34,5 +34,30 @@ export const resolvers: IResolvers = {
         `Photo album ${photoAlbum.title} has been created!`
       );
     },
+    removePhotoAlbum: async (_, { photoAlbumId }, { req }) => {
+      if (!req.userId) {
+        return response(false, 'The user is not authorized!');
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return response(false, 'There is no user with this ID!');
+      }
+
+      const photoAlbum = await PhotoAlbum.findOne({
+        where: { id: photoAlbumId, user },
+      });
+      if (!photoAlbum) {
+        return response(
+          false,
+          'There is no photo album with this ID or you do not own it!'
+        );
+      }
+
+      const title = photoAlbum.title;
+      await photoAlbum.remove();
+
+      return response(true, `Photo album ${title} has been removed!`);
+    },
   },
 };
