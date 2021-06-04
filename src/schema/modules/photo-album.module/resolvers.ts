@@ -36,7 +36,7 @@ export const resolvers: IResolvers = {
 
       const photoAlbum = await PhotoAlbum.create({
         title,
-        description,
+        description: description ? description : '',
       }).save();
       if (!photoAlbum) {
         return response(false, "Photo album hasn't been created!");
