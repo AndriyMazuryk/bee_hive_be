@@ -11,6 +11,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { Photo } from './Photo';
+import { PhotoAlbum } from './PhotoAlbum';
 import { Post } from './Post';
 import { Wall } from './Wall';
 
@@ -61,6 +62,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Photo, photo => photo.user)
   photos: Photo[];
+
+  @OneToMany(() => PhotoAlbum, photoAlbums => photoAlbums.user)
+  photoAlbums: PhotoAlbum[];
 
   @OneToOne(() => Photo, avatar => avatar.owner)
   @JoinColumn()
