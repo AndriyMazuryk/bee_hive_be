@@ -6,3 +6,7 @@ type PhotoAlbum {
   updatedAt: String
   photos: [Photo]!
 }
+
+extend type Mutation {
+  createPhotoAlbum(title: String!, description: String): Response!
+}
