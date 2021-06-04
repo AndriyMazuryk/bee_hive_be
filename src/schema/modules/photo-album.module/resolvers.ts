@@ -26,10 +26,7 @@ export const resolvers: IResolvers = {
         return response(false, 'The user is not authorized!');
       }
 
-      const user = await User.findOne({
-        where: { id: req.userId },
-        relations: ['photoAlbums'],
-      });
+      const user = await User.findOne(req.userId);
       if (!user) {
         return response(false, 'There is no user with this ID!');
       }
@@ -37,13 +34,11 @@ export const resolvers: IResolvers = {
       const photoAlbum = await PhotoAlbum.create({
         title,
         description: description ? description : '',
+        user,
       }).save();
       if (!photoAlbum) {
         return response(false, "Photo album hasn't been created!");
       }
-
-      user.photoAlbums.push(photoAlbum);
-      await user.save();
 
       return response(
         true,
