@@ -15,7 +15,7 @@ export const resolvers: IResolvers = {
         relations: ['avatar', 'photos'],
       });
       if (!user) {
-        return false;
+        return null;
       }
       // TODO add default avatar
       // if (!user.avatar) {
@@ -38,7 +38,7 @@ export const resolvers: IResolvers = {
         relations: ['subscribers'],
       });
       if (!user) {
-        return false;
+        return null;
       }
 
       return user.subscribers;
@@ -49,7 +49,7 @@ export const resolvers: IResolvers = {
         relations: ['subscriptions'],
       });
       if (!user) {
-        return false;
+        return null;
       }
 
       return user.subscriptions;
@@ -71,10 +71,7 @@ export const resolvers: IResolvers = {
     ) => {
       const userExists = await User.findOne({ where: { email } });
       if (userExists) {
-        return {
-          success: false,
-          message: 'User with this email already exists!',
-        };
+        return response(false, 'User with this email already exists!');
       }
 
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -93,7 +90,7 @@ export const resolvers: IResolvers = {
         user,
       }).save();
 
-      return { success: true, message: 'User has been created!' };
+      return response(true, 'User has been created!');
     },
     updateUser: async (
       _,
@@ -110,12 +107,12 @@ export const resolvers: IResolvers = {
       { req }
     ) => {
       if (!req.userId) {
-        return false;
+        return response(false, 'The user is not authorized!');
       }
 
       const user = await User.findOne(req.userId);
       if (!user) {
-        return false;
+        return response(false, 'There is no user with this ID!');
       }
 
       let message;
@@ -128,10 +125,7 @@ export const resolvers: IResolvers = {
       } else if (email) {
         const emailIsAlreadyInUse = await User.findOne({ where: { email } });
         if (emailIsAlreadyInUse) {
-          return {
-            success: false,
-            message: 'This email is already in use!',
-          };
+          return response(false, 'This email is already in use!');
         }
 
         user.email = email;
@@ -153,25 +147,26 @@ export const resolvers: IResolvers = {
         user.userInfo = userInfo;
         message = 'User info have been changed!';
       } else {
-        return {
-          success: false,
-          message: "You haven't specified any parameters!",
-        };
+        return response(false, "You haven't specified any parameters!");
       }
 
       await user.save();
 
-      return { success: true, message: message };
+      return response(true, message);
     },
     removeUser: async (_, { userId }) => {
       const user = await User.findOne(userId);
+      if (!user) {
+        return response(false, 'There is no user with this ID!');
+      }
+
       await user.remove();
 
-      return true;
+      return response(true, 'User has been removed!');
     },
     subscribeToUser: async (_, { userIdToSubscribe }, { req }) => {
       if (!req.userId) {
-        return response(false, 'Invalid user ID!');
+        return response(false, 'The user is not authorized!');
       }
 
       const user = await User.findOne({
