@@ -44,7 +44,6 @@ export const uploadFile = async (createReadStream, pathName) => {
     readStream
       .pipe(writeStream)
       .on('finish', () => {
-        console.log('FINISHED!');
         resolve(response(true, 'File has been uploaded!'));
       })
       .on('error', error => {
