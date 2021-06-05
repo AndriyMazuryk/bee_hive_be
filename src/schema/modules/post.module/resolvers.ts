@@ -1,5 +1,6 @@
 import { IResolvers } from 'graphql-tools';
 import { User, Post, Wall } from '../../../entity';
+import { response, message } from '../../../utils';
 
 export const resolvers: IResolvers = {
   Query: {
@@ -18,7 +19,7 @@ export const resolvers: IResolvers = {
         relations: ['posts'],
       });
       if (!user) {
-        return false;
+        return null;
       }
 
       return user.posts.sort((a, b) => b.id - a.id);
@@ -29,7 +30,7 @@ export const resolvers: IResolvers = {
         relations: ['wall'],
       });
       if (!user || !user.wall) {
-        return false;
+        return null;
       }
 
       const posts = await Post.find({
@@ -37,7 +38,7 @@ export const resolvers: IResolvers = {
         relations: ['author'],
       });
       if (!posts) {
-        return false;
+        return null;
       }
       if (posts.length < 1) {
         return [];
@@ -49,12 +50,12 @@ export const resolvers: IResolvers = {
   Mutation: {
     createPost: async (_, { recipientId, text }, { req }) => {
       if (!req.userId) {
-        return false;
+        return response(false, message.notAuthorized);
       }
 
       const user = await User.findOne(req.userId);
       if (!user) {
-        return false;
+        return response(false, message.invalidUserId);
       }
 
       const recipient = await User.findOne({
@@ -62,45 +63,50 @@ export const resolvers: IResolvers = {
         relations: ['wall'],
       });
       if (!recipient || !recipient.wall) {
-        return false;
+        return response(false, message.invalidUserIdToSendPost);
       }
 
       const wall = await Wall.findOne({ where: { id: recipient.wall.id } });
       if (!wall) {
-        return false;
+        return response(false, message.userDoesNotHaveWall);
       }
 
-      // create post
-      const post = new Post();
-      post.text = text;
-      post.author = user;
-      post.wall = wall;
-      await post.save();
+      const post = await Post.create({
+        text,
+        author: user,
+        wall,
+      }).save();
+      if (!post) {
+        return response(false, message.postFail);
+      }
 
-      return true;
+      return response(true, message.postSuccess);
     },
     updatePost: async (_, { postId, text }, { req }) => {
       if (!req.userId) {
-        return false;
+        return response(false, message.notAuthorized);
       }
       const user = await User.findOne(req.userId);
       if (!user) {
-        return false;
+        return response(false, message.invalidUserId);
       }
 
       const post = await Post.findOne({ where: { id: postId, author: user } });
       if (!post) {
-        return false;
+        return response(false, message.invalidPostId);
       }
 
       post.text = text;
-      await post.save();
+      const success = await post.save();
+      if (!success) {
+        return response(false, message.postNotUpdated);
+      }
 
-      return true;
+      return response(true, message.postUpdated);
     },
     removePost: async (_, { postId }, { req }) => {
       if (!req.userId) {
-        return false;
+        return response(false, message.notAuthorized);
       }
 
       const user = await User.findOne({
@@ -108,7 +114,7 @@ export const resolvers: IResolvers = {
         relations: ['wall'],
       });
       if (!user) {
-        return false;
+        return response(false, message.invalidUserId);
       }
 
       const post = await Post.findOne({
@@ -118,12 +124,15 @@ export const resolvers: IResolvers = {
         ],
       });
       if (!post) {
-        return false;
+        return response(false, message.invalidPostId);
       }
 
-      await post.remove();
+      const success = await post.remove();
+      if (!success) {
+        return response(false, message.postNotRemoved);
+      }
 
-      return true;
+      return response(true, message.postRemoved);
     },
     likePost: async (_, { postId }) => {
       //

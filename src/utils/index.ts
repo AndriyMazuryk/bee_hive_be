@@ -14,4 +14,14 @@ export const message = {
   loggedIn: 'You are logged in!',
   loggedOut: 'You are logged out!',
   tokensInvalidated: 'Tokens are invalidated!',
+  invalidUserIdToSendPost:
+    'There is no user with this ID to send him/her a post',
+  userDoesNotHaveWall: 'This user does not have a wall!',
+  postFail: 'Post has not been created!',
+  postSuccess: 'Post has been created!',
+  invalidPostId: 'There is no post with this ID!',
+  postUpdated: 'Post has been updated!',
+  postNotUpdated: 'Post has not been updated!',
+  postRemoved: 'Post has been removed!',
+  postNotRemoved: 'Post has not been removed',
 };

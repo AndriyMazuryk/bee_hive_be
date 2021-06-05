@@ -19,9 +19,9 @@ extend type Query {
 }
 
 extend type Mutation {
-  createPost(recipientId: ID!, text: String!): Boolean!
-  updatePost(postId: ID!, text: String!): Boolean!
-  removePost(postId: ID!): Boolean!
-  likePost(postId: ID!): Boolean!
-  dislikePost(postId: ID!): Boolean!
+  createPost(recipientId: ID!, text: String!): Response!
+  updatePost(postId: ID!, text: String!): Response!
+  removePost(postId: ID!): Response!
+  likePost(postId: ID!): Response!
+  dislikePost(postId: ID!): Response!
 }
