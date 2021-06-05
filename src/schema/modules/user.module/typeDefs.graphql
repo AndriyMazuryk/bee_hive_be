@@ -51,5 +51,5 @@ type Mutation {
 
   removeUser(userId: ID!): Boolean!
 
-  subscribeToUser(userIdToSubscribe: ID!): Boolean!
+  subscribeToUser(userIdToSubscribe: ID!): Response!
 }

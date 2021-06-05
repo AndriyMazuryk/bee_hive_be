@@ -9,6 +9,8 @@ import {
   JoinColumn,
   OneToMany,
   ManyToOne,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 import { Photo } from './Photo';
 import { PhotoAlbum } from './PhotoAlbum';
@@ -74,15 +76,10 @@ export class User extends BaseEntity {
   @JoinColumn()
   wall: Wall;
 
-  @ManyToOne(() => User, user => user.subscriptions)
-  subscription: User;
-
-  @OneToMany(() => User, user => user.subscription)
-  subscriptions: User[];
-
-  @ManyToOne(() => User, user => user.subscribers)
-  subscriber: User;
-
-  @OneToMany(() => User, user => user.subscriber)
+  @ManyToMany(() => User, subscriber => subscriber.subscriptions)
+  @JoinTable()
   subscribers: User[];
+
+  @ManyToMany(() => User, subscription => subscription.subscribers)
+  subscriptions: User[];
 }

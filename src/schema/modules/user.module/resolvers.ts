@@ -1,6 +1,7 @@
 import { IResolvers } from 'graphql-tools';
 import * as bcrypt from 'bcryptjs';
 import { User, Wall } from '../../../entity';
+import { response } from '../../../utils';
 
 export const resolvers: IResolvers = {
   Query: {
@@ -170,7 +171,7 @@ export const resolvers: IResolvers = {
     },
     subscribeToUser: async (_, { userIdToSubscribe }, { req }) => {
       if (!req.userId) {
-        return false;
+        return response(false, 'Invalid user ID!');
       }
 
       const user = await User.findOne({
@@ -178,7 +179,7 @@ export const resolvers: IResolvers = {
         relations: ['subscriptions'],
       });
       if (!user) {
-        return false;
+        return response(false, 'There is no user with this ID!');
       }
 
       const userToSubscribe = await User.findOne({
@@ -186,20 +187,27 @@ export const resolvers: IResolvers = {
         relations: ['subscribers'],
       });
       if (!userToSubscribe) {
-        return false;
+        return response(false, 'There is no user with this ID to subscribe!');
       }
 
       if (user.id === userToSubscribe.id) {
-        return false;
+        return response(false, "You can't subscribe to yourself!");
+      }
+
+      if (
+        user.subscriptions.filter(user => user.id === userToSubscribe.id)
+          .length > 0
+      ) {
+        return response(false, 'You already subscribed to this user!');
       }
 
       user.subscriptions.push(userToSubscribe);
       await user.save();
 
-      userToSubscribe.subscribers.push(user);
-      await userToSubscribe.save();
-
-      return true;
+      return response(
+        true,
+        `You have been subscribed to ${userToSubscribe.firstName} ${userToSubscribe.lastName}`
+      );
     },
   },
 };
