@@ -1,5 +1,5 @@
 extend type Mutation {
-  login(email: String!, password: String!): Boolean!
-  logout: Boolean!
-  invalidateTokens: Boolean!
+  login(email: String!, password: String!): Response!
+  logout: Response!
+  invalidateTokens: Response!
 }
