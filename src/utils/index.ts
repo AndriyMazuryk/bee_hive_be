@@ -30,6 +30,10 @@ export const message = {
   invalidPhotoAlbumOrUserId:
     'There is no photo album with this ID or you do not own it!',
   invalidPhotoAlbumId: 'There is no photo album with this ID!',
+  invalidPhotoOrUserId: 'There is no photo with this ID or you do not own it!',
+  invalidPhotoId: 'There is no photo with this ID!',
+  photoRemoved: 'Photo has been removed!',
+  photoNotRemoved: 'Photo has not been removed!',
 };
 
 export const uploadFile = async (createReadStream, pathName) => {

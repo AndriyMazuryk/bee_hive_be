@@ -59,5 +59,29 @@ export const resolvers: IResolvers = {
         return error;
       }
     },
+    removePhoto: async (_, { photoId }, { req }) => {
+      if (!req.userId) {
+        return response(false, message.notAuthorized);
+      }
+
+      const user = await User.findOne(req.userId);
+      if (!user) {
+        return response(false, message.invalidUserId);
+      }
+
+      const photo = await Photo.findOne({ where: { id: photoId, user } });
+      if (!photo) {
+        return response(false, message.invalidPhotoOrUserId);
+      }
+
+      let resp = response(true, message.photoRemoved);
+      try {
+        await photo.remove();
+      } catch (error) {
+        resp = response(false, message.photoNotRemoved);
+      }
+
+      return resp;
+    },
   },
 };
