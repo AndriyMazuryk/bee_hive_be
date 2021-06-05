@@ -1,3 +1,5 @@
+import * as fs from 'fs';
+
 interface IResponse {
   success: boolean;
   message: string;
@@ -16,7 +18,7 @@ export const message = {
   loggedOut: 'You are logged out!',
   tokensInvalidated: 'Tokens are invalidated!',
   invalidUserIdToSendPost:
-    'There is no user with this ID to send him/her a post',
+    'There is no user with this ID to send him/her a post!',
   userDoesNotHaveWall: 'This user does not have a wall!',
   postFail: 'Post has not been created!',
   postSuccess: 'Post has been created!',
@@ -24,5 +26,25 @@ export const message = {
   postUpdated: 'Post has been updated!',
   postNotUpdated: 'Post has not been updated!',
   postRemoved: 'Post has been removed!',
-  postNotRemoved: 'Post has not been removed',
+  postNotRemoved: 'Post has not been removed!',
+  invalidPhotoAlbumOrUserId:
+    'There is no photo album with this ID or you do not own it!',
+  invalidPhotoAlbumId: 'There is no photo album with this ID!',
+};
+
+export const uploadFile = async (createReadStream, pathName) => {
+  const readStream = createReadStream();
+  const writeStream = fs.createWriteStream(pathName);
+
+  return new Promise((resolve, reject) => {
+    readStream
+      .pipe(writeStream)
+      .on('finish', () => {
+        console.log('FINISHED!');
+        resolve(response(true, 'File has been uploaded!'));
+      })
+      .on('error', error => {
+        reject(response(false, 'File has not been uploaded!'));
+      });
+  });
 };

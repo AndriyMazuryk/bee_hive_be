@@ -9,7 +9,7 @@ type Photo {
 }
 
 extend type Query {
-  getAllPhotoLocations: [String]!
+  getAllPhotoUrls: [String]!
   getPhotosByUserId(userId: ID!): [Photo]!
 }
 

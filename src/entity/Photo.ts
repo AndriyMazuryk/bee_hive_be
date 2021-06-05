@@ -26,7 +26,7 @@ export class Photo extends BaseEntity {
   encoding: string;
 
   @Column('text')
-  location: string;
+  url: string;
 
   @Column('boolean', { default: false })
   isAvatar: boolean;

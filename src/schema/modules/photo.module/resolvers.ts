@@ -1,68 +1,63 @@
 import { IResolvers } from 'graphql-tools';
-import { User, Photo } from '../../../entity';
-import * as fs from 'fs';
+import { User, Photo, PhotoAlbum } from '../../../entity';
+import { response, message, uploadFile } from '../../../utils';
 import * as path from 'path';
 import { v4 as uuid } from 'uuid';
 
 export const resolvers: IResolvers = {
   Query: {
-    getAllPhotoLocations: async () => {
-      const locations = await Photo.find({ select: ['location'] });
-      return locations.map(i => i.location);
+    getAllPhotoUrls: async () => {
+      const urls = await Photo.find({ select: ['url'] });
+      return urls.map(i => i.url);
     },
     getPhotosByUserId: async (_, { userId }) => {
       //
     },
   },
   Mutation: {
-    uploadPhoto: async (_, { file, avatar }, { req }) => {
+    uploadPhoto: async (_, { photoAlbumId, file }, { req }) => {
       if (!req.userId) {
-        return false;
+        return response(false, message.notAuthorized);
       }
+
       const user = await User.findOne({
         where: { id: req.userId },
         relations: ['photos', 'avatar'],
       });
-      let isAvatar = false;
-      if (avatar) {
-        isAvatar = true;
+      if (!user) {
+        return response(false, message.invalidUserId);
       }
+
+      const photoAlbum = await PhotoAlbum.findOne({
+        where: { id: photoAlbumId, user },
+        relations: ['user'],
+      });
+      if (!photoAlbum) {
+        return response(false, message.invalidPhotoAlbumOrUserId);
+      }
+
       const { createReadStream, filename, mimetype, encoding } = await file;
 
       const filenameWithUuid = `${uuid()}-${filename}`;
       const pathName = path.join(`./public/photos/${filenameWithUuid}`);
-      const location = `http://localhost:4000/photos/${filenameWithUuid}`;
-      const stream = createReadStream();
+      const url = `http://localhost:4000/photos/${filenameWithUuid}`;
 
-      return new Promise((resolve, reject) => {
-        stream
-          .pipe(fs.createWriteStream(pathName))
-          .on('finish', async () => {
-            const photo = await Photo.create({
-              filename: filenameWithUuid,
-              encoding,
-              mimetype,
-              location,
-              isAvatar,
-            }).save();
-            user.photos.push(photo);
-            if (isAvatar) {
-              user.avatar = photo;
-            }
-            await user.save();
-            resolve({
-              success: true,
-              message: 'Successfully Uploaded',
-            });
-          })
-          .on('error', err => {
-            console.log('Error Event Emitted');
-            reject({
-              success: false,
-              message: 'Failed',
-            });
-          });
-      });
+      let uploadedFile;
+      try {
+        uploadedFile = await uploadFile(createReadStream, pathName);
+        const photo = await Photo.create({
+          filename: filenameWithUuid,
+          mimetype,
+          encoding,
+          url,
+          user,
+          photoAlbum,
+        }).save();
+        return uploadedFile;
+      } catch (error) {
+        console.log('Error!', error);
+        return error;
+      }
     },
   },
 };
