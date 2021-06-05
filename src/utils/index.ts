@@ -10,6 +10,7 @@ export const response = (success: boolean, message: string): IResponse => {
 export const message = {
   notAuthorized: 'The user is not authorized!',
   invalidUserId: 'There is no user with this ID!',
+  invalidEmail: 'There is no user with this email!',
   invalidPassword: 'Wrong password!',
   loggedIn: 'You are logged in!',
   loggedOut: 'You are logged out!',

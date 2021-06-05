@@ -9,7 +9,7 @@ export const resolvers: IResolvers = {
     login: async (_, { email, password }, { res }) => {
       const user = await User.findOne({ where: { email } });
       if (!user) {
-        return response(false, message.notAuthorized);
+        return response(false, message.invalidEmail);
       }
 
       const valid = await bcrypt.compare(password, user.password);
