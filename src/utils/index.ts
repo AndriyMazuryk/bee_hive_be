@@ -36,6 +36,8 @@ export const message = {
   photoNotRemoved: 'Photo has not been removed!',
   needPhotoAlbumIdOrAvatar:
     'You have to provide photo album ID or set isAvatar to true',
+  emptyTextField: 'The text field is empty!',
+  // invalidRecipientId: 'Invalid recipient ID!',
 };
 
 export const uploadFile = async (createReadStream, pathName) => {

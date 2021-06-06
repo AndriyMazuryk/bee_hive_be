@@ -53,6 +53,10 @@ export const resolvers: IResolvers = {
         return response(false, message.notAuthorized);
       }
 
+      if (text.length < 1) {
+        return response(false, message.emptyTextField);
+      }
+
       const user = await User.findOne(req.userId);
       if (!user) {
         return response(false, message.invalidUserId);
@@ -86,6 +90,11 @@ export const resolvers: IResolvers = {
       if (!req.userId) {
         return response(false, message.notAuthorized);
       }
+
+      if (text.length < 1) {
+        return response(false, message.emptyTextField);
+      }
+
       const user = await User.findOne(req.userId);
       if (!user) {
         return response(false, message.invalidUserId);
