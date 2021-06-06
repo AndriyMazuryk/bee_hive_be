@@ -75,7 +75,9 @@ export const resolvers: IResolvers = {
             description: 'My avatars',
           }).save();
         } else {
-          const oldAvatar = await Photo.findOne({ where: { photoAlbum } });
+          const oldAvatar = await Photo.findOne({
+            where: { photoAlbum, isAvatar },
+          });
           if (!oldAvatar) {
             return;
           }
