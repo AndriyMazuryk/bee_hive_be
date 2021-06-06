@@ -22,7 +22,7 @@ export const resolvers: IResolvers = {
 
       const user = await User.findOne({
         where: { id: req.userId },
-        relations: ['photo_albums', 'photos', 'avatar'],
+        relations: ['photoAlbums', 'photos', 'avatar'],
       });
       if (!user) {
         return response(false, message.invalidUserId);
@@ -43,14 +43,14 @@ export const resolvers: IResolvers = {
             title: 'Avatars',
             description: 'My avatars',
           }).save();
+        } else {
+          const oldAvatar = await Photo.findOne({ where: { photoAlbum } });
+          if (!oldAvatar) {
+            return;
+          }
+          oldAvatar.isAvatar = false;
+          await oldAvatar.save();
         }
-
-        const oldAvatar = await Photo.findOne({ where: { photoAlbum } });
-        if (!oldAvatar) {
-          return;
-        }
-        oldAvatar.isAvatar = false;
-        await oldAvatar.save();
       } else {
         photoAlbum = await PhotoAlbum.findOne({
           where: { id: photoAlbumId, user },
