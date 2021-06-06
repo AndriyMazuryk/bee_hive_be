@@ -23,7 +23,7 @@ export class PhotoAlbum extends BaseEntity {
   @Column('text')
   description: string;
 
-  @CreateDateColumn({ type: 'timestamptz', default: 'NOW()' })
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
   @UpdateDateColumn({

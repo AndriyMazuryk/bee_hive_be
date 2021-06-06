@@ -49,7 +49,7 @@ export class User extends BaseEntity {
   @Column('text')
   userInfo: string;
 
-  @CreateDateColumn({ type: 'timestamptz', default: 'NOW()' })
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
   @UpdateDateColumn({

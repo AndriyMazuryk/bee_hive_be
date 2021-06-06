@@ -37,7 +37,7 @@ export class Photo extends BaseEntity {
   @Column('int', { default: 0 })
   dislikes: number;
 
-  @CreateDateColumn({ type: 'timestamptz', default: 'NOW()' })
+  @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
   @UpdateDateColumn({
