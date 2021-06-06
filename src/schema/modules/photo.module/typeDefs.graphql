@@ -4,6 +4,7 @@ type Photo {
   mimetype: String!
   encoding: String!
   url: String!
+  isAvatar: Boolean!
   createdAt: String!
   updatedAt: String
 }
