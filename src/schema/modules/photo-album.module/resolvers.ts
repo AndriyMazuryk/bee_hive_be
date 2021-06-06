@@ -1,6 +1,8 @@
 import { IResolvers } from 'graphql-tools';
 import { PhotoAlbum, User } from '../../../entity';
 import { response } from '../../../utils';
+import { unlink } from 'fs/promises';
+import * as path from 'path';
 
 export const resolvers: IResolvers = {
   Query: {
@@ -117,7 +119,16 @@ export const resolvers: IResolvers = {
         await user.save();
       }
 
-      photoAlbum.photos.forEach(async photo => await photo.remove());
+      photoAlbum.photos.forEach(async photo => {
+        const pathName = path.join('public', 'photos', photo.filename);
+        try {
+          await unlink(pathName);
+          await photo.remove();
+        } catch (error) {
+          console.log(error);
+          return response(false, `Photo album ${title} has not been removed!`);
+        }
+      });
       user.photoAlbums = null;
       await user.save();
       await photoAlbum.remove();
