@@ -95,6 +95,7 @@ export const resolvers: IResolvers = {
 
       const photoAlbum = await PhotoAlbum.findOne({
         where: { id: photoAlbumId, user },
+        relations: ['photos'],
       });
       if (!photoAlbum) {
         return response(
@@ -104,6 +105,14 @@ export const resolvers: IResolvers = {
       }
 
       const title = photoAlbum.title;
+      if (title === 'Avatars') {
+        user.avatar = null;
+        await user.save();
+      }
+
+      photoAlbum.photos.forEach(async photo => await photo.remove());
+      user.photoAlbums = null;
+      await user.save();
       await photoAlbum.remove();
 
       return response(true, `Photo album ${title} has been removed!`);
