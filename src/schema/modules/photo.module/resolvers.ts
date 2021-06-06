@@ -3,6 +3,7 @@ import { User, Photo, PhotoAlbum } from '../../../entity';
 import { response, message, uploadFile } from '../../../utils';
 import * as path from 'path';
 import { v4 as uuid } from 'uuid';
+import { unlink } from 'fs/promises';
 
 export const resolvers: IResolvers = {
   Query: {
@@ -97,7 +98,7 @@ export const resolvers: IResolvers = {
       const { createReadStream, filename, mimetype, encoding } = await file;
 
       const filenameWithUuid = `${uuid()}-${filename}`;
-      const pathName = path.join(`./public/photos/${filenameWithUuid}`);
+      const pathName = path.join('public', 'photos', filenameWithUuid);
       const url = `http://localhost:4000/photos/${filenameWithUuid}`;
 
       let uploadedFile;
@@ -143,10 +144,15 @@ export const resolvers: IResolvers = {
       }
 
       let resp = response(true, message.photoRemoved);
+
+      const pathName = path.join('public', 'photos', photo.filename);
+
       try {
+        await unlink(pathName);
         await photo.remove();
       } catch (error) {
-        resp = response(false, message.photoNotRemoved);
+        console.log(error);
+        return response(false, message.photoNotRemoved);
       }
 
       return resp;
