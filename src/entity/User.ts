@@ -8,7 +8,6 @@ import {
   OneToOne,
   JoinColumn,
   OneToMany,
-  ManyToOne,
   ManyToMany,
   JoinTable,
 } from 'typeorm';
@@ -68,7 +67,7 @@ export class User extends BaseEntity {
   @OneToMany(() => PhotoAlbum, photoAlbums => photoAlbums.user)
   photoAlbums: PhotoAlbum[];
 
-  @OneToOne(() => Photo, avatar => avatar.owner)
+  @OneToOne(() => Photo, avatar => avatar.profile)
   @JoinColumn()
   avatar: Photo;
 
