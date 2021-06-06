@@ -15,23 +15,48 @@ export const resolvers: IResolvers = {
     },
   },
   Mutation: {
-    uploadPhoto: async (_, { photoAlbumId, file }, { req }) => {
+    uploadPhoto: async (_, { photoAlbumId, file, isAvatar }, { req }) => {
       if (!req.userId) {
         return response(false, message.notAuthorized);
       }
 
       const user = await User.findOne({
         where: { id: req.userId },
-        relations: ['photos', 'avatar'],
+        relations: ['photo_albums', 'photos', 'avatar'],
       });
       if (!user) {
         return response(false, message.invalidUserId);
       }
 
-      const photoAlbum = await PhotoAlbum.findOne({
-        where: { id: photoAlbumId, user },
-        relations: ['user'],
-      });
+      if (!photoAlbumId && !isAvatar) {
+        return response(false, message.needPhotoAlbumIdOrAvatar);
+      }
+
+      let photoAlbum;
+      if (isAvatar) {
+        photoAlbum = await PhotoAlbum.findOne({
+          where: { title: 'Avatars', user },
+        });
+
+        if (!photoAlbum) {
+          photoAlbum = await PhotoAlbum.create({
+            title: 'Avatars',
+            description: 'My avatars',
+          }).save();
+        }
+
+        const oldAvatar = await Photo.findOne({ where: { photoAlbum } });
+        if (!oldAvatar) {
+          return;
+        }
+        oldAvatar.isAvatar = false;
+        await oldAvatar.save();
+      } else {
+        photoAlbum = await PhotoAlbum.findOne({
+          where: { id: photoAlbumId, user },
+          relations: ['user'],
+        });
+      }
       if (!photoAlbum) {
         return response(false, message.invalidPhotoAlbumOrUserId);
       }
@@ -45,6 +70,7 @@ export const resolvers: IResolvers = {
       let uploadedFile;
       try {
         uploadedFile = await uploadFile(createReadStream, pathName);
+
         const photo = await Photo.create({
           filename: filenameWithUuid,
           mimetype,
@@ -52,7 +78,16 @@ export const resolvers: IResolvers = {
           url,
           user,
           photoAlbum,
+          isAvatar,
         }).save();
+
+        if (isAvatar) {
+          user.photoAlbums.push(photoAlbum);
+          user.photos.push(photo);
+          user.avatar = photo;
+          await user.save();
+        }
+
         return uploadedFile;
       } catch (error) {
         console.log('Error!', error);
