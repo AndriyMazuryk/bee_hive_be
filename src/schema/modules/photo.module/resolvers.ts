@@ -8,10 +8,41 @@ export const resolvers: IResolvers = {
   Query: {
     getAllPhotoUrls: async () => {
       const urls = await Photo.find({ select: ['url'] });
+      if (!urls) {
+        return null;
+      }
+
       return urls.map(i => i.url);
     },
     getPhotosByUserId: async (_, { userId }) => {
-      //
+      if (!userId) {
+        return null;
+      }
+
+      const user = await User.findOne({
+        where: { id: userId },
+        relations: ['photos'],
+      });
+      if (!user) {
+        return null;
+      }
+
+      return user.photos.sort((a, b) => b.id - a.id);
+    },
+    getPhotosByPhotoAlbumId: async (_, { photoAlbumId }) => {
+      if (!photoAlbumId) {
+        return null;
+      }
+
+      const photoAlbum = await PhotoAlbum.findOne({
+        where: { id: photoAlbumId },
+        relations: ['photos'],
+      });
+      if (!photoAlbum) {
+        return null;
+      }
+
+      return photoAlbum.photos.sort((a, b) => b.id - a.id);
     },
   },
   Mutation: {

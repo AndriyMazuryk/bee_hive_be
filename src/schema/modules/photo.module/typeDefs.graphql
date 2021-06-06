@@ -11,6 +11,7 @@ type Photo {
 extend type Query {
   getAllPhotoUrls: [String]!
   getPhotosByUserId(userId: ID!): [Photo]!
+  getPhotosByPhotoAlbumId(photoAlbumId: ID!): [Photo]!
 }
 
 extend type Mutation {
