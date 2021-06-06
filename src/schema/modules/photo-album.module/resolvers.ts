@@ -69,6 +69,13 @@ export const resolvers: IResolvers = {
         );
       }
 
+      if (photoAlbum.title === 'Avatars') {
+        return response(
+          false,
+          'You cannot change the name of the Avatars photo album.'
+        );
+      }
+
       if (title) {
         photoAlbum.title = title;
       }
