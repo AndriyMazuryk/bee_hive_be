@@ -35,7 +35,7 @@ export const resolvers: IResolvers = {
 
       const posts = await Post.find({
         where: { wall: user.wall },
-        relations: ['author'],
+        relations: ['author', 'author.avatar'],
       });
       if (!posts) {
         return null;
