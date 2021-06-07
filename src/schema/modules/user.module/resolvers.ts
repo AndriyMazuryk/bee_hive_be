@@ -17,10 +17,7 @@ export const resolvers: IResolvers = {
       if (!user) {
         return null;
       }
-      // TODO add default avatar
-      // if (!user.avatar) {
-      //   return false;
-      // }
+
       return user;
     },
     getAllUsers: async () => {
