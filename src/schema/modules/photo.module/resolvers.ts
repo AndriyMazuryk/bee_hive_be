@@ -79,11 +79,10 @@ export const resolvers: IResolvers = {
           const oldAvatar = await Photo.findOne({
             where: { photoAlbum, isAvatar },
           });
-          if (!oldAvatar) {
-            return;
+          if (oldAvatar) {
+            oldAvatar.isAvatar = false;
+            await oldAvatar.save();
           }
-          oldAvatar.isAvatar = false;
-          await oldAvatar.save();
         }
       } else {
         photoAlbum = await PhotoAlbum.findOne({
@@ -133,7 +132,10 @@ export const resolvers: IResolvers = {
         return response(false, message.notAuthorized);
       }
 
-      const user = await User.findOne(req.userId);
+      const user = await User.findOne({
+        where: { id: req.userId },
+        relations: ['avatar', 'photos'],
+      });
       if (!user) {
         return response(false, message.invalidUserId);
       }
@@ -148,6 +150,26 @@ export const resolvers: IResolvers = {
       const pathName = path.join('public', 'photos', photo.filename);
 
       try {
+        if (photo.isAvatar) {
+          const avatarsPhotoAlbum = await PhotoAlbum.findOne({
+            where: { title: 'Avatars', user },
+          });
+          const prevAvatars = await Photo.find({
+            where: { photoAlbum: avatarsPhotoAlbum },
+            order: { id: 'DESC' },
+            skip: 1,
+            take: 1,
+          });
+          const prevAvatar = prevAvatars[0];
+          if (prevAvatar) {
+            user.avatar = prevAvatar;
+            prevAvatar.isAvatar = true;
+            await prevAvatar.save();
+          } else {
+            user.avatar = await Photo.findOne(1);
+          }
+          await user.save();
+        }
         await unlink(pathName);
         await photo.remove();
       } catch (error) {

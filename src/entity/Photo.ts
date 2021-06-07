@@ -6,7 +6,7 @@ import {
   ManyToOne,
   UpdateDateColumn,
   CreateDateColumn,
-  OneToOne,
+  OneToMany,
 } from 'typeorm';
 import { PhotoAlbum } from './PhotoAlbum';
 import { User } from './User';
@@ -53,6 +53,6 @@ export class Photo extends BaseEntity {
   @ManyToOne(() => PhotoAlbum, photoAlbum => photoAlbum.photos)
   photoAlbum: PhotoAlbum;
 
-  @OneToOne(() => User, profile => profile.avatar)
-  profile: User;
+  @OneToMany(() => User, users => users.avatar)
+  users: User[];
 }

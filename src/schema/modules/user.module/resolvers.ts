@@ -1,6 +1,6 @@
 import { IResolvers } from 'graphql-tools';
 import * as bcrypt from 'bcryptjs';
-import { User, Wall } from '../../../entity';
+import { Photo, User, Wall } from '../../../entity';
 import { response } from '../../../utils';
 
 export const resolvers: IResolvers = {
@@ -74,6 +74,8 @@ export const resolvers: IResolvers = {
         return response(false, 'User with this email already exists!');
       }
 
+      const defaultAvatar = await Photo.findOne(1);
+
       const hashedPassword = await bcrypt.hash(password, 10);
       const user = await User.create({
         firstName,
@@ -84,6 +86,7 @@ export const resolvers: IResolvers = {
         location,
         birthDate,
         userInfo,
+        avatar: defaultAvatar,
       }).save();
 
       await Wall.create({

@@ -6,7 +6,7 @@ import { schema } from './schema';
 import { createConnection } from 'typeorm';
 import * as cookieParser from 'cookie-parser';
 import { verify } from 'jsonwebtoken';
-import { User } from './entity';
+import { Photo, User } from './entity';
 import { createTokens } from './auth';
 
 const startServer = async () => {
@@ -24,6 +24,24 @@ const startServer = async () => {
   await server.start();
 
   await createConnection();
+
+  const createDefaultAvatar = async () => {
+    try {
+      const defaultAvatar = await Photo.findOne(1);
+      if (!defaultAvatar) {
+        const defaultAvatarFileName = 'default-avatar.webp';
+        await Photo.create({
+          filename: defaultAvatarFileName,
+          mimetype: '',
+          encoding: '',
+          url: `http://localhost:4000/photos/${defaultAvatarFileName}`,
+        }).save();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  createDefaultAvatar();
 
   app.use(cookieParser());
 

@@ -1,8 +1,8 @@
 type Photo {
   id: ID!
   filename: String!
-  mimetype: String!
-  encoding: String!
+  mimetype: String
+  encoding: String
   url: String!
   isAvatar: Boolean!
   createdAt: String!
