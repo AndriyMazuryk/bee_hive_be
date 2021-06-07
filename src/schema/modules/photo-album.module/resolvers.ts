@@ -97,7 +97,10 @@ export const resolvers: IResolvers = {
         return response(false, 'The user is not authorized!');
       }
 
-      const user = await User.findOne(req.userId);
+      const user = await User.findOne({
+        where: { id: req.userId },
+        relations: ['photoAlbums'],
+      });
       if (!user) {
         return response(false, 'There is no user with this ID!');
       }
@@ -129,7 +132,9 @@ export const resolvers: IResolvers = {
           return response(false, `Photo album ${title} has not been removed!`);
         }
       });
-      user.photoAlbums = null;
+      user.photoAlbums = user.photoAlbums.map(photoAlbum =>
+        photoAlbum.id === photoAlbumId ? null : photoAlbum
+      );
       await user.save();
       await photoAlbum.remove();
 
