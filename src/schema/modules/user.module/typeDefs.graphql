@@ -24,6 +24,7 @@ type Query {
   getUserById(userId: ID!): User
   getSubscribersByUserId(userId: ID!): [User]!
   getSubscriptionsByUserId(userId: ID!): [User]!
+  getNewsByUserId(userId: ID!): [Post]!
 }
 
 type Mutation {

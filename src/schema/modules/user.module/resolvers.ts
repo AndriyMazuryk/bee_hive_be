@@ -1,7 +1,8 @@
 import { IResolvers } from 'graphql-tools';
 import * as bcrypt from 'bcryptjs';
-import { Photo, User, Wall } from '../../../entity';
-import { response } from '../../../utils';
+import { Photo, Post, User, Wall } from '../../../entity';
+import { message, response } from '../../../utils';
+import { In } from 'typeorm';
 
 export const resolvers: IResolvers = {
   Query: {
@@ -50,6 +51,32 @@ export const resolvers: IResolvers = {
       }
 
       return user.subscriptions;
+    },
+    getNewsByUserId: async (_, { userId }) => {
+      const user = await User.findOne({
+        where: { id: userId },
+        relations: ['subscriptions'],
+      });
+      if (!user) {
+        null;
+      }
+      const subscriptionsIds = user.subscriptions.map(
+        subscription => subscription.id
+      );
+
+      const posts = await Post.find({
+        relations: ['author'],
+        where: { author: In([...subscriptionsIds]) },
+        order: {
+          id: 'DESC',
+        },
+        take: 15,
+      });
+      if (!posts) {
+        return null;
+      }
+
+      return posts;
     },
   },
   Mutation: {
