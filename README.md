@@ -10,3 +10,6 @@
 - Add Messages
 - Add Subscriptions for Messages
 - Add Subscriptions for Notifications
+- Add tests
+- Add documentation
+- Deploy to Heroku
