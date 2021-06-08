@@ -1,4 +1,5 @@
 import * as fs from 'fs';
+import { Post } from '../entity';
 
 interface IResponse {
   success: boolean;
@@ -54,4 +55,24 @@ export const uploadFile = async (createReadStream, pathName) => {
         reject(response(false, 'File has not been uploaded!'));
       });
   });
+};
+
+export const MARKS = ['VERY_BAD', 'BAD', 'NEUTRAL', 'GOOD', 'VERY_GOOD'];
+const keys = ['veryBad', 'bad', 'neutral', 'good', 'veryGood'];
+export const constToKey = (constant: string): string =>
+  keys[MARKS.indexOf(constant)];
+
+export const recalculateKarmaTo = async user => {
+  const posts = await Post.find({ where: { author: user } });
+  const votesValues = posts.map(post => post.votesValue);
+  const votesValue = votesValues.reduce((total, number) => total + number);
+  const votesCounts = posts.map(photo => photo.votesCount);
+  const votesCount = votesCounts.reduce((total, number) => total + number);
+
+  user.karma = parseFloat((votesValue / votesCount).toFixed(1));
+  if (!user.karma) {
+    user.karma = 0;
+  }
+  console.log('karma', user.karma);
+  await user.save();
 };

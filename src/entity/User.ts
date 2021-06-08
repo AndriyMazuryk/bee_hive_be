@@ -12,7 +12,7 @@ import {
   JoinTable,
   ManyToOne,
 } from 'typeorm';
-import { Karma } from './Karma';
+import { Opinion } from './Opinion';
 import { Photo } from './Photo';
 import { PhotoAlbum } from './PhotoAlbum';
 import { Post } from './Post';
@@ -50,6 +50,9 @@ export class User extends BaseEntity {
   @Column('text')
   userInfo: string;
 
+  @Column('float', { default: 0 })
+  karma: number;
+
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
 
@@ -72,8 +75,8 @@ export class User extends BaseEntity {
   @ManyToOne(() => Photo, avatar => avatar.users)
   avatar: Photo;
 
-  @ManyToOne(() => Karma, karma => karma.voters)
-  karma: Karma;
+  @OneToMany(() => Opinion, opinions => opinions.user)
+  opinions: Opinion[];
 
   @OneToOne(() => Wall, wall => wall.user)
   @JoinColumn()

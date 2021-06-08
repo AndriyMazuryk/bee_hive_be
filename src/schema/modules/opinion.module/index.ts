@@ -3,8 +3,8 @@ import { createModule } from 'graphql-modules';
 import * as typeDefs from './typeDefs.graphql';
 import { resolvers } from './resolvers';
 
-export const karmaModule = createModule({
-  id: 'karma',
+export const opinionModule = createModule({
+  id: 'opinion',
   dirname: __dirname,
   typeDefs: [typeDefs],
   resolvers: resolvers,

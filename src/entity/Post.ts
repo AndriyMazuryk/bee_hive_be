@@ -6,10 +6,11 @@ import {
   ManyToOne,
   UpdateDateColumn,
   CreateDateColumn,
-  OneToOne,
-  JoinColumn,
+  OneToMany,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
-import { Karma } from './Karma';
+import { Opinion } from './Opinion';
 import { User } from './User';
 import { Wall } from './Wall';
 
@@ -22,10 +23,10 @@ export class Post extends BaseEntity {
   text: string;
 
   @Column('int', { default: 0 })
-  likes: number;
+  votesValue: number;
 
   @Column('int', { default: 0 })
-  dislikes: number;
+  votesCount: number;
 
   @CreateDateColumn({ type: 'timestamptz' })
   createdAt: Date;
@@ -43,7 +44,6 @@ export class Post extends BaseEntity {
   @ManyToOne(() => Wall, wall => wall.posts)
   wall: Wall;
 
-  @OneToOne(() => Karma, karma => karma.post)
-  @JoinColumn()
-  karma: Karma;
+  @OneToMany(() => Opinion, opinions => opinions.post)
+  opinions: Opinion[];
 }

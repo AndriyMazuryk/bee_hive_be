@@ -1,7 +1,7 @@
 import { IResolvers } from 'graphql-tools';
 import * as bcrypt from 'bcryptjs';
 import { Photo, Post, User, Wall } from '../../../entity';
-import { message, response } from '../../../utils';
+import { recalculateKarmaTo, response } from '../../../utils';
 import { In } from 'typeorm';
 
 export const resolvers: IResolvers = {
@@ -19,16 +19,32 @@ export const resolvers: IResolvers = {
         return null;
       }
 
+      recalculateKarmaTo(user);
+
       return user;
     },
     getAllUsers: async () => {
-      return await User.find();
+      const users = await User.find();
+      if (!users) {
+        return null;
+      }
+
+      users.forEach(user => recalculateKarmaTo(user));
+
+      return users;
     },
     getUserById: async (_, { userId }) => {
-      return await User.findOne({
+      const user = await User.findOne({
         where: { id: userId },
         relations: ['photos', 'avatar'],
       });
+      if (!user) {
+        return null;
+      }
+
+      recalculateKarmaTo(user);
+
+      return user;
     },
     getSubscribersByUserId: async (_, { userId }) => {
       const user = await User.findOne({
@@ -77,6 +93,19 @@ export const resolvers: IResolvers = {
       }
 
       return posts;
+    },
+    getKarmaByUserId: async (_, { userId }) => {
+      const user = await User.findOne({ where: { id: userId } });
+      if (!user) {
+        return null;
+      }
+
+      recalculateKarmaTo(user);
+      if (!user.karma) {
+        return 0;
+      }
+
+      return user.karma;
     },
   },
   Mutation: {

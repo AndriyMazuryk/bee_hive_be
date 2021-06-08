@@ -1,0 +1,18 @@
+type Opinion {
+  id: ID!
+  veryGood: Int!
+  good: Int!
+  neutral: Int!
+  bad: Int!
+  veryBad: Int!
+  post: Post!
+  user: User!
+}
+
+extend type Query {
+  getKarma(userId: ID!): Float!
+}
+
+extend type Mutation {
+  setOpinion(postId: ID!, opinion: String!): Response!
+}
