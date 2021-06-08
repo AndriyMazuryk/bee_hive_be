@@ -9,10 +9,6 @@ type Opinion {
   user: User!
 }
 
-extend type Query {
-  getKarma(userId: ID!): Float!
-}
-
 extend type Mutation {
-  setOpinion(postId: ID!, opinion: String!): Response!
+  setOpinionByPostId(postId: ID!, opinion: String!): Response!
 }

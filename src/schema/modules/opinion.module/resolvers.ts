@@ -4,7 +4,7 @@ import { response, message, constToKey } from '../../../utils';
 
 export const resolvers: IResolvers = {
   Mutation: {
-    setOpinion: async (_, { postId, opinion }, { req }) => {
+    setOpinionByPostId: async (_, { postId, opinion }, { req }) => {
       if (!req.userId) {
         return response(false, message.notAuthorized);
       }
