@@ -65,7 +65,7 @@ export const resolvers: IResolvers = {
       );
 
       const posts = await Post.find({
-        relations: ['author'],
+        relations: ['author', 'author.avatar'],
         where: { author: In([...subscriptionsIds]) },
         order: {
           id: 'DESC',
