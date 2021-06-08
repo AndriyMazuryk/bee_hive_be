@@ -2,6 +2,7 @@ type User {
   id: ID!
   firstName: String!
   lastName: String!
+  karma: Float!
   email: String!
   password: String!
   occupation: String!
