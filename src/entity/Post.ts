@@ -6,7 +6,10 @@ import {
   ManyToOne,
   UpdateDateColumn,
   CreateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
+import { Karma } from './Karma';
 import { User } from './User';
 import { Wall } from './Wall';
 
@@ -39,4 +42,8 @@ export class Post extends BaseEntity {
 
   @ManyToOne(() => Wall, wall => wall.posts)
   wall: Wall;
+
+  @OneToOne(() => Karma, karma => karma.post)
+  @JoinColumn()
+  karma: Karma;
 }

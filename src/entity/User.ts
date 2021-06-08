@@ -12,6 +12,7 @@ import {
   JoinTable,
   ManyToOne,
 } from 'typeorm';
+import { Karma } from './Karma';
 import { Photo } from './Photo';
 import { PhotoAlbum } from './PhotoAlbum';
 import { Post } from './Post';
@@ -70,6 +71,9 @@ export class User extends BaseEntity {
 
   @ManyToOne(() => Photo, avatar => avatar.users)
   avatar: Photo;
+
+  @ManyToOne(() => Karma, karma => karma.voters)
+  karma: Karma;
 
   @OneToOne(() => Wall, wall => wall.user)
   @JoinColumn()
