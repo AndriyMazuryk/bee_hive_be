@@ -6,6 +6,7 @@ import {
   postModule,
   photoModule,
   photoAlbumModule,
+  karmaModule,
 } from './modules';
 
 const application = createApplication({
@@ -16,6 +17,7 @@ const application = createApplication({
     postModule,
     photoModule,
     photoAlbumModule,
+    karmaModule,
   ],
 });
 

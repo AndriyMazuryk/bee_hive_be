@@ -4,3 +4,4 @@ export { postModule } from './post.module';
 export { photoModule } from './photo.module';
 export { uploadModule } from './upload.module';
 export { photoAlbumModule } from './photo-album.module';
+export { karmaModule } from './karma.module';
