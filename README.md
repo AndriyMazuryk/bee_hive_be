@@ -1,7 +1,12 @@
-# Awesome Project Build with TypeORM
+# TODO
 
-Steps to run this project:
-
-1. Run `npm i` command
-2. Setup database settings inside `ormconfig.json` file
-3. Run `npm start` command
+- Refactor project
+- Finish removeUser mutation
+- create docker image
+- Status Online/Offline
+- Add class-validator for DB Entities
+- Add comments
+- Add comments for comments
+- Add Messages
+- Add Subscriptions for Messages
+- Add Subscriptions for Notifications
