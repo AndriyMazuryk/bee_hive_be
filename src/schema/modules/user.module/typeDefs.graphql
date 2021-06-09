@@ -12,6 +12,7 @@ type User {
   createdAt: String!
   updatedAt: String
   avatar: Photo
+  opinions: [Opinion]!
 }
 
 type Response {

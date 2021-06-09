@@ -5,6 +5,7 @@ type PhotoAlbum {
   createdAt: String!
   updatedAt: String
   photos: [Photo]!
+  user: User!
 }
 
 extend type Query {

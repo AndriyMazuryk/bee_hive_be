@@ -3,11 +3,11 @@ scalar Date
 type Post {
   id: ID!
   text: String!
-  likes: Int!
-  dislikes: Int!
   createdAt: Date!
   updatedAt: Date!
   author: User!
+  wall: Wall!
+  opinions: [Opinion]!
 }
 
 extend type Query {
