@@ -70,7 +70,12 @@ export const recalculateKarmaTo = async user => {
   const posts = await Post.find({ where: { author: user } });
   const votesValues = posts.map(post => post.votesValue);
   const votesCounts = posts.map(photo => photo.votesCount);
-  if (votesValues.length < 1 || votesCounts.length < 1) {
+  if (
+    votesValues.length < 1 ||
+    votesCounts.length < 1 ||
+    votesValues[0] < 1 ||
+    votesCounts[0] < 1
+  ) {
     user.karma = 0;
     await user.save();
     return;
