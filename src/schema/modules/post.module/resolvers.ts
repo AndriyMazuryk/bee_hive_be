@@ -131,10 +131,13 @@ export const resolvers: IResolvers = {
           { id: postId, author: user },
           { id: postId, wall: user.wall },
         ],
+        relations: ['opinions'],
       });
       if (!post) {
         return response(false, message.invalidPostId);
       }
+
+      post.opinions.forEach(async opinion => await opinion.remove());
 
       const success = await post.remove();
       if (!success) {
