@@ -7,6 +7,10 @@ type Message {
   recipient: User!
 }
 
+extend type Query {
+  getMessagesByUserId(userId: ID!): [Message]!
+}
+
 extend type Mutation {
   sendMessage(recipientId: ID!, text: String!): Response!
 }
