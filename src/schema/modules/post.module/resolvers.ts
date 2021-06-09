@@ -143,11 +143,5 @@ export const resolvers: IResolvers = {
 
       return response(true, message.postRemoved);
     },
-    likePost: async (_, { postId }) => {
-      //
-    },
-    dislikePost: async (_, { postId }) => {
-      //
-    },
   },
 };

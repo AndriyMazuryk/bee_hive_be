@@ -22,6 +22,4 @@ extend type Mutation {
   createPost(recipientId: ID!, text: String!): Response!
   updatePost(postId: ID!, text: String!): Response!
   removePost(postId: ID!): Response!
-  likePost(postId: ID!): Response!
-  dislikePost(postId: ID!): Response!
 }
