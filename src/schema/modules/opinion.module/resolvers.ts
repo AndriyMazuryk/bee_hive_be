@@ -1,6 +1,6 @@
 import { IResolvers } from 'graphql-tools';
 import { Opinion, Post, User } from '../../../entity';
-import { response, message, constToKey } from '../../../utils';
+import { response, message, constToKey, KEYS } from '../../../utils';
 
 export const resolvers: IResolvers = {
   Mutation: {
@@ -43,11 +43,10 @@ export const resolvers: IResolvers = {
         await user.save();
       }
 
-      const keys = ['veryBad', 'bad', 'neutral', 'good', 'veryGood'];
-      const passedMarkKey = constToKey(opinion);
+      const passedOpinionKey = constToKey(opinion);
 
-      keys.forEach((opinionKey, index) => {
-        if (opinionKey === passedMarkKey) {
+      KEYS.forEach((opinionKey, index) => {
+        if (opinionKey === passedOpinionKey) {
           if (userOpinion[opinionKey]) {
             userOpinion[opinionKey] = false;
             post['votesValue'] -= index + 1;

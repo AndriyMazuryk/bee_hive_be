@@ -57,10 +57,10 @@ export const uploadFile = async (createReadStream, pathName) => {
   });
 };
 
-export const MARKS = ['VERY_BAD', 'BAD', 'NEUTRAL', 'GOOD', 'VERY_GOOD'];
-const keys = ['veryBad', 'bad', 'neutral', 'good', 'veryGood'];
+export const OPINIONS = ['VERY_BAD', 'BAD', 'NEUTRAL', 'GOOD', 'VERY_GOOD'];
+export const KEYS = ['veryBad', 'bad', 'neutral', 'good', 'veryGood'];
 export const constToKey = (constant: string): string =>
-  keys[MARKS.indexOf(constant)];
+  KEYS[OPINIONS.indexOf(constant)];
 
 export const recalculateKarmaTo = async user => {
   const posts = await Post.find({ where: { author: user } });
@@ -73,6 +73,5 @@ export const recalculateKarmaTo = async user => {
   if (!user.karma) {
     user.karma = 0;
   }
-  console.log('karma', user.karma);
   await user.save();
 };
