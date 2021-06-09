@@ -38,7 +38,7 @@ export const resolvers: IResolvers = {
         relations: ['author', 'author.avatar'],
       });
       if (!posts) {
-        return null;
+        return [];
       }
       if (posts.length < 1) {
         return [];
