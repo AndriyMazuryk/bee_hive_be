@@ -24,7 +24,7 @@ export const resolvers: IResolvers = {
       return user;
     },
     getAllUsers: async () => {
-      const users = await User.find();
+      const users = await User.find({ relations: ['avatar'] });
       if (!users) {
         return null;
       }
