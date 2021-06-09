@@ -5,3 +5,4 @@ export { photoModule } from './photo.module';
 export { uploadModule } from './upload.module';
 export { photoAlbumModule } from './photo-album.module';
 export { opinionModule } from './opinion.module';
+export { messageModule } from './message.module';

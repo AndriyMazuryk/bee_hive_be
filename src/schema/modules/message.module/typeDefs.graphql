@@ -6,3 +6,7 @@ type Message {
   author: User!
   recipient: User!
 }
+
+extend type Mutation {
+  sendMessage(recipientId: ID!, text: String!): Response!
+}

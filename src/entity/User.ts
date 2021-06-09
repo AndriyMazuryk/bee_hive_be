@@ -6,7 +6,6 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   OneToOne,
-  JoinColumn,
   OneToMany,
   ManyToMany,
   JoinTable,
@@ -80,7 +79,6 @@ export class User extends BaseEntity {
   opinions: Opinion[];
 
   @OneToOne(() => Wall, wall => wall.user)
-  @JoinColumn()
   wall: Wall;
 
   @ManyToMany(() => User, subscriber => subscriber.subscriptions)
@@ -90,11 +88,9 @@ export class User extends BaseEntity {
   @ManyToMany(() => User, subscription => subscription.subscribers)
   subscriptions: User[];
 
-  @OneToOne(() => Message, message => message.author)
-  @JoinColumn()
-  sentMessage: Message;
+  @OneToMany(() => Message, message => message.author)
+  sentMessages: Message[];
 
-  @OneToOne(() => Message, message => message.recipient)
-  @JoinColumn()
-  receivedMessage: Message;
+  @OneToMany(() => Message, message => message.recipient)
+  receivedMessages: Message[];
 }

@@ -7,6 +7,7 @@ import {
   photoModule,
   photoAlbumModule,
   opinionModule,
+  messageModule,
 } from './modules';
 
 const application = createApplication({
@@ -18,6 +19,7 @@ const application = createApplication({
     photoModule,
     photoAlbumModule,
     opinionModule,
+    messageModule,
   ],
 });
 

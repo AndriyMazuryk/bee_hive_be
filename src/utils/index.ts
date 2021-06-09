@@ -39,6 +39,10 @@ export const message = {
     'You have to provide photo album ID or set isAvatar to true',
   emptyTextField: 'The text field is empty!',
   // invalidRecipientId: 'Invalid recipient ID!',
+  invalidUserIdToSendMessage:
+    'There is no user with this ID to send him/her a message!',
+  messageSuccess: 'Message has been sent!',
+  messageFail: 'Message has not been sent!',
 };
 
 export const uploadFile = async (createReadStream, pathName) => {

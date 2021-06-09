@@ -5,7 +5,8 @@ import {
   BaseEntity,
   UpdateDateColumn,
   CreateDateColumn,
-  OneToOne,
+  JoinTable,
+  ManyToOne,
 } from 'typeorm';
 import { User } from './User';
 
@@ -27,9 +28,11 @@ export class Message extends BaseEntity {
   })
   updatedAt: Date;
 
-  @OneToOne(() => User, author => author.sentMessage)
+  @ManyToOne(() => User, author => author.sentMessages)
+  @JoinTable()
   author: User;
 
-  @OneToOne(() => User, recipient => recipient.receivedMessage)
+  @ManyToOne(() => User, recipient => recipient.receivedMessages)
+  @JoinTable()
   recipient: User;
 }
