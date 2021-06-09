@@ -8,6 +8,17 @@ type Post {
   author: User!
   wall: Wall!
   opinions: [Opinion]!
+  veryGood: Int!
+  good: Int!
+  neutral: Int!
+  bad: Int!
+  veryBad: Int!
+}
+
+type Wall {
+  id: ID!
+  user: User!
+  posts: [Post]!
 }
 
 extend type Query {

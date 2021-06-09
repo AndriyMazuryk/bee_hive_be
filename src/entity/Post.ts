@@ -46,4 +46,19 @@ export class Post extends BaseEntity {
 
   @OneToMany(() => Opinion, opinions => opinions.post)
   opinions: Opinion[];
+
+  @Column('int', { default: 0 })
+  veryGood: number;
+
+  @Column('int', { default: 0 })
+  good: number;
+
+  @Column('int', { default: 0 })
+  neutral: number;
+
+  @Column('int', { default: 0 })
+  bad: number;
+
+  @Column('int', { default: 0 })
+  veryBad: number;
 }

@@ -46,37 +46,26 @@ export const resolvers: IResolvers = {
       const keys = ['veryBad', 'bad', 'neutral', 'good', 'veryGood'];
       const passedMarkKey = constToKey(opinion);
 
-      keys.forEach(async (opinionKey, index) => {
+      keys.forEach((opinionKey, index) => {
         if (opinionKey === passedMarkKey) {
           if (userOpinion[opinionKey]) {
             userOpinion[opinionKey] = false;
             post['votesValue'] -= index + 1;
             post['votesCount'] -= 1;
+            post[opinionKey] -= 1;
           } else {
             userOpinion[opinionKey] = true;
             post['votesValue'] += index + 1;
             post['votesCount'] += 1;
+            post[opinionKey] += 1;
           }
         } else if (userOpinion[opinionKey]) {
           userOpinion[opinionKey] = false;
           post['votesValue'] -= index + 1;
           post['votesCount'] -= 1;
+          post[opinionKey] -= 1;
         }
       });
-
-      console.log('votesVlue', post.votesValue, 'votesCout', post.votesCount);
-      console.log(
-        '1:',
-        userOpinion.veryBad,
-        '2:',
-        userOpinion.bad,
-        '3:',
-        userOpinion.neutral,
-        '4:',
-        userOpinion.good,
-        '5:',
-        userOpinion.veryGood
-      );
 
       await userOpinion.save();
       await post.save();
