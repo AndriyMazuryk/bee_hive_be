@@ -69,13 +69,15 @@ export const constToKey = (constant: string): string =>
 export const recalculateKarmaTo = async user => {
   const posts = await Post.find({ where: { author: user } });
   const votesValues = posts.map(post => post.votesValue);
-  const votesValue = votesValues.reduce((total, number) => total + number);
   const votesCounts = posts.map(photo => photo.votesCount);
+  if (votesValues.length < 1 || votesCounts.length < 1) {
+    user.karma = 0;
+    await user.save();
+    return;
+  }
+  const votesValue = votesValues.reduce((total, number) => total + number);
   const votesCount = votesCounts.reduce((total, number) => total + number);
 
   user.karma = parseFloat((votesValue / votesCount).toFixed(1));
-  if (!user.karma) {
-    user.karma = 0;
-  }
   await user.save();
 };
