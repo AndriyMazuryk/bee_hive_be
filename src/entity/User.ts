@@ -12,6 +12,7 @@ import {
   JoinTable,
   ManyToOne,
 } from 'typeorm';
+import { Message } from './Message';
 import { Opinion } from './Opinion';
 import { Photo } from './Photo';
 import { PhotoAlbum } from './PhotoAlbum';
@@ -88,4 +89,12 @@ export class User extends BaseEntity {
 
   @ManyToMany(() => User, subscription => subscription.subscribers)
   subscriptions: User[];
+
+  @OneToOne(() => Message, message => message.author)
+  @JoinColumn()
+  sentMessage: Message;
+
+  @OneToOne(() => Message, message => message.recipient)
+  @JoinColumn()
+  receivedMessage: Message;
 }

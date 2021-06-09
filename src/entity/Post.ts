@@ -7,8 +7,6 @@ import {
   UpdateDateColumn,
   CreateDateColumn,
   OneToMany,
-  ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { Opinion } from './Opinion';
 import { User } from './User';

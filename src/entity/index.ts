@@ -4,3 +4,4 @@ export { Wall } from './Wall';
 export { Photo } from './Photo';
 export { PhotoAlbum } from './PhotoAlbum';
 export { Opinion } from './Opinion';
+export { Message } from './Message';
