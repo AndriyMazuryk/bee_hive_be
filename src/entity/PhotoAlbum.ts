@@ -22,10 +22,11 @@ export class PhotoAlbum extends BaseEntity {
   @Column('text')
   description: string;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
   @UpdateDateColumn({
+    name: 'updated_at',
     type: 'timestamptz',
     onUpdate: 'NOW()',
     nullable: true,

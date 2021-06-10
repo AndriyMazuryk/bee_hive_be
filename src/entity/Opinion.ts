@@ -13,7 +13,7 @@ export class Opinion extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column('boolean', { default: false })
+  @Column('boolean', { name: 'very_good', default: false })
   veryGood: boolean;
 
   @Column('boolean', { default: false })
@@ -25,7 +25,7 @@ export class Opinion extends BaseEntity {
   @Column('boolean', { default: false })
   bad: boolean;
 
-  @Column('boolean', { default: false })
+  @Column('boolean', { name: 'very_bad', default: false })
   veryBad: boolean;
 
   @ManyToOne(() => User, user => user.opinions)

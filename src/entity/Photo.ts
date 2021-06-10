@@ -28,7 +28,7 @@ export class Photo extends BaseEntity {
   @Column('text')
   url: string;
 
-  @Column('boolean', { default: false })
+  @Column('boolean', { name: 'is_avatar', default: false })
   isAvatar: boolean;
 
   @Column('int', { default: 0 })
@@ -37,10 +37,11 @@ export class Photo extends BaseEntity {
   @Column('int', { default: 0 })
   dislikes: number;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
   @UpdateDateColumn({
+    name: 'updated_at',
     type: 'timestamptz',
     onUpdate: 'NOW()',
     nullable: true,

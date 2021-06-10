@@ -26,10 +26,10 @@ export class User extends BaseEntity {
   @Column('int', { default: 0 })
   count: number;
 
-  @Column('text')
+  @Column('text', { name: 'first_name' })
   firstName: string;
 
-  @Column('text')
+  @Column('text', { name: 'last_name' })
   lastName: string;
 
   @Column('text')
@@ -44,19 +44,20 @@ export class User extends BaseEntity {
   @Column('text')
   location: string;
 
-  @Column('date')
+  @Column('date', { name: 'birth_date' })
   birthDate: string;
 
-  @Column('text')
+  @Column('text', { name: 'user_info' })
   userInfo: string;
 
   @Column('float', { default: 0 })
   karma: number;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
   @UpdateDateColumn({
+    name: 'updated_at',
     type: 'timestamptz',
     onUpdate: 'NOW()',
     nullable: true,

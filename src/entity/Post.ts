@@ -20,16 +20,17 @@ export class Post extends BaseEntity {
   @Column('text')
   text: string;
 
-  @Column('int', { default: 0 })
+  @Column('int', { name: 'votes_value', default: 0 })
   votesValue: number;
 
-  @Column('int', { default: 0 })
+  @Column('int', { name: 'votes_count', default: 0 })
   votesCount: number;
 
-  @CreateDateColumn({ type: 'timestamptz' })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
   @UpdateDateColumn({
+    name: 'updated_at',
     type: 'timestamptz',
     onUpdate: 'NOW()',
     nullable: true,
