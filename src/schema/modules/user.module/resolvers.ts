@@ -60,7 +60,7 @@ export const resolvers: IResolvers = {
     getSubscriptionsByUserId: async (_, { userId }) => {
       const user = await User.findOne({
         where: { id: userId },
-        relations: ['subscriptions'],
+        relations: ['subscriptions', 'subscriptions.avatar'],
       });
       if (!user) {
         return null;
