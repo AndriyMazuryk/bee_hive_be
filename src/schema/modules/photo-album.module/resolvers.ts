@@ -127,6 +127,7 @@ export const resolvers: IResolvers = {
         photoAlbum.id === photoAlbumId ? null : photoAlbum
       );
       await user.save();
+      await photoAlbum.save();
       await photoAlbum.remove();
 
       return response(true, `Photo album ${title} has been removed!`);

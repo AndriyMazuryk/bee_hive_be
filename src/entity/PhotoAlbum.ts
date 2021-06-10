@@ -36,6 +36,6 @@ export class PhotoAlbum extends BaseEntity {
   @ManyToOne(() => User, user => user.photoAlbums)
   user: User;
 
-  @OneToMany(() => Photo, photo => photo.photoAlbum)
+  @OneToMany(() => Photo, photo => photo.photoAlbum, { cascade: true })
   photos: Photo[];
 }

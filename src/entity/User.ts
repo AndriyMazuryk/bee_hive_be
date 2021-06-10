@@ -70,7 +70,9 @@ export class User extends BaseEntity {
   @OneToMany(() => Photo, photo => photo.user)
   photos: Photo[];
 
-  @OneToMany(() => PhotoAlbum, photoAlbums => photoAlbums.user)
+  @OneToMany(() => PhotoAlbum, photoAlbums => photoAlbums.user, {
+    cascade: true,
+  })
   photoAlbums: PhotoAlbum[];
 
   @ManyToOne(() => Photo, avatar => avatar.users)
