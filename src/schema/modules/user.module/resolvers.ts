@@ -1,7 +1,7 @@
 import { IResolvers } from 'graphql-tools';
 import * as bcrypt from 'bcryptjs';
 import { Photo, Post, User, Wall } from '../../../entity';
-import { recalculateKarmaTo, response } from '../../../utils';
+import { message, recalculateKarmaTo, response } from '../../../utils';
 import { In } from 'typeorm';
 
 export const resolvers: IResolvers = {
@@ -55,7 +55,7 @@ export const resolvers: IResolvers = {
         return null;
       }
 
-      return user.subscribers;
+      return user.subscribers.sort((a, b) => a.id - b.id);
     },
     getSubscriptionsByUserId: async (_, { userId }) => {
       const user = await User.findOne({
@@ -66,7 +66,7 @@ export const resolvers: IResolvers = {
         return null;
       }
 
-      return user.subscriptions;
+      return user.subscriptions.sort((a, b) => a.id - b.id);
     },
     getNewsByUserId: async (_, { userId }) => {
       const user = await User.findOne({
@@ -163,21 +163,21 @@ export const resolvers: IResolvers = {
       { req }
     ) => {
       if (!req.userId) {
-        return response(false, 'The user is not authorized!');
+        return response(false, message.notAuthorized);
       }
 
       const user = await User.findOne(req.userId);
       if (!user) {
-        return response(false, 'There is no user with this ID!');
+        return response(false, message.invalidUserId);
       }
 
-      let message;
+      let resMessage;
       if (firstName) {
         user.firstName = firstName;
-        message = 'First name have been changed!';
+        resMessage = 'First name have been changed!';
       } else if (lastName) {
         user.lastName = lastName;
-        message = 'Last name have been changed!';
+        resMessage = 'Last name have been changed!';
       } else if (email) {
         const emailIsAlreadyInUse = await User.findOne({ where: { email } });
         if (emailIsAlreadyInUse) {
@@ -185,44 +185,44 @@ export const resolvers: IResolvers = {
         }
 
         user.email = email;
-        message = 'Email have been changed!';
+        resMessage = 'Email have been changed!';
       } else if (password) {
         const hashedPassword = await bcrypt.hash(password, 10);
         user.password = hashedPassword;
-        message = 'Password have been changed!';
+        resMessage = 'Password have been changed!';
       } else if (occupation) {
         user.occupation = occupation;
-        message = 'Occupation have been changed!';
+        resMessage = 'Occupation have been changed!';
       } else if (location) {
         user.location = location;
-        message = 'Location have been changed!';
+        resMessage = 'Location have been changed!';
       } else if (birthDate) {
         user.birthDate = birthDate;
-        message = 'Birth date have been changed!';
+        resMessage = 'Birth date have been changed!';
       } else if (userInfo) {
         user.userInfo = userInfo;
-        message = 'User info have been changed!';
+        resMessage = 'User info have been changed!';
       } else {
         return response(false, "You haven't specified any parameters!");
       }
 
       await user.save();
 
-      return response(true, message);
+      return response(true, resMessage);
     },
     removeUser: async (_, { userId }) => {
       const user = await User.findOne(userId);
       if (!user) {
-        return response(false, 'There is no user with this ID!');
+        return response(false, message.invalidUserId);
       }
 
       await user.remove();
 
       return response(true, 'User has been removed!');
     },
-    subscribeToUser: async (_, { userIdToSubscribe }, { req }) => {
+    subscribeToUser: async (_, { userId }, { req }) => {
       if (!req.userId) {
-        return response(false, 'The user is not authorized!');
+        return response(false, message.notAuthorized);
       }
 
       const user = await User.findOne({
@@ -230,11 +230,11 @@ export const resolvers: IResolvers = {
         relations: ['subscriptions'],
       });
       if (!user) {
-        return response(false, 'There is no user with this ID!');
+        return response(false, message.invalidUserId);
       }
 
       const userToSubscribe = await User.findOne({
-        where: { id: userIdToSubscribe },
+        where: { id: userId },
         relations: ['subscribers'],
       });
       if (!userToSubscribe) {
@@ -258,6 +258,47 @@ export const resolvers: IResolvers = {
       return response(
         true,
         `You have been subscribed to ${userToSubscribe.firstName} ${userToSubscribe.lastName}`
+      );
+    },
+    unsubscribeToUser: async (_, { userId }, { req }) => {
+      if (!req.userId) {
+        return response(false, message.notAuthorized);
+      }
+
+      const user = await User.findOne({
+        where: { id: req.userId },
+        relations: ['subscriptions'],
+      });
+      if (!user) {
+        return response(false, message.invalidUserId);
+      }
+
+      const userToUnsubscribe = await User.findOne({
+        where: { id: userId },
+      });
+      if (!userToUnsubscribe) {
+        return response(false, 'There is no user with this ID to unsubscribe!');
+      }
+
+      if (user.id === userToUnsubscribe.id) {
+        return response(false, "You can't unsubscribe to yourself!");
+      }
+
+      const subscriptionExists = user.subscriptions.filter(
+        user => user.id === userToUnsubscribe.id
+      );
+      if (!subscriptionExists) {
+        return response(false, 'You are not subscribed to this user!');
+      }
+
+      user.subscriptions = user.subscriptions.filter(
+        user => user.id !== userToUnsubscribe.id
+      );
+      await user.save();
+
+      return response(
+        true,
+        `You have been unsubscribed to ${userToUnsubscribe.firstName} ${userToUnsubscribe.lastName}`
       );
     },
   },
