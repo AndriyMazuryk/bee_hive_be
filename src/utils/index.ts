@@ -38,7 +38,7 @@ export const message = {
   needPhotoAlbumIdOrAvatar:
     'You have to provide photo album ID or set isAvatar to true',
   emptyTextField: 'The text field is empty!',
-  // invalidRecipientId: 'Invalid recipient ID!',
+  invalidRecipientId: 'Invalid recipient ID!',
   invalidUserIdToSendMessage:
     'There is no user with this ID to send him/her a message!',
   messageSuccess: 'Message has been sent!',
@@ -61,10 +61,13 @@ export const uploadFile = async (createReadStream, pathName) => {
   });
 };
 
-export const OPINIONS = ['VERY_BAD', 'BAD', 'NEUTRAL', 'GOOD', 'VERY_GOOD'];
-export const KEYS = ['veryBad', 'bad', 'neutral', 'good', 'veryGood'];
-export const constToKey = (constant: string): string =>
-  KEYS[OPINIONS.indexOf(constant)];
+export const OPINIONS = {
+  veryBad: 'VERY_BAD',
+  bad: 'BAD',
+  neutral: 'NEUTRAL',
+  good: 'GOOD',
+  veryGood: 'VERY_GOOD',
+};
 
 export const recalculateKarmaTo = async user => {
   const posts = await Post.find({ where: { author: user } });

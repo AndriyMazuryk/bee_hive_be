@@ -1,6 +1,6 @@
 import { IResolvers } from 'graphql-tools';
 import { Opinion, Post, User } from '../../../entity';
-import { response, message, constToKey, KEYS } from '../../../utils';
+import { response, message, OPINIONS } from '../../../utils';
 
 export const resolvers: IResolvers = {
   Mutation: {
@@ -43,28 +43,33 @@ export const resolvers: IResolvers = {
         await user.save();
       }
 
-      const passedOpinionKey = constToKey(opinion);
-
-      KEYS.forEach((opinionKey, index) => {
-        if (opinionKey === passedOpinionKey) {
-          if (userOpinion[opinionKey]) {
-            userOpinion[opinionKey] = false;
-            post['votesValue'] -= index + 1;
+      /*
+      types of variables:
+        opinion: 'VERY_BAD'
+        OPINIONS : { key: veryBad, value: 'VERY_BAD', ...}
+      */
+      for (let [index, [key, value]] of Object.entries(
+        Object.entries(OPINIONS)
+      )) {
+        if (value === opinion) {
+          if (userOpinion[key]) {
+            userOpinion[key] = false;
+            post['votesValue'] -= parseInt(index) + 1;
             post['votesCount'] -= 1;
-            post[opinionKey] -= 1;
+            post[key] -= 1;
           } else {
-            userOpinion[opinionKey] = true;
-            post['votesValue'] += index + 1;
+            userOpinion[key] = true;
+            post['votesValue'] += parseInt(index) + 1;
             post['votesCount'] += 1;
-            post[opinionKey] += 1;
+            post[key] += 1;
           }
-        } else if (userOpinion[opinionKey]) {
-          userOpinion[opinionKey] = false;
-          post['votesValue'] -= index + 1;
+        } else if (userOpinion[key]) {
+          userOpinion[key] = false;
+          post['votesValue'] -= parseInt(index) + 1;
           post['votesCount'] -= 1;
-          post[opinionKey] -= 1;
+          post[key] -= 1;
         }
-      });
+      }
 
       await userOpinion.save();
       await post.save();
