@@ -54,7 +54,7 @@ export const resolvers: IResolvers = {
       }
 
       const messages = [...sentMessages, ...receivedMessages].sort(
-        (a, b) => b.id - a.id
+        (a, b) => a.id - b.id
       );
 
       return messages;
