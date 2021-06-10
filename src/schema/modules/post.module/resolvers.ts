@@ -75,11 +75,14 @@ export const resolvers: IResolvers = {
         return response(false, message.userDoesNotHaveWall);
       }
 
-      const post = await Post.create({
-        text,
-        author: user,
-        wall,
-      }).save();
+      const date = new Date();
+      const post = new Post();
+      post.text = text;
+      post.author = user;
+      post.wall = wall;
+      post.updatedAt = date;
+      post.createdAt = date;
+      await post.save();
       if (!post) {
         return response(false, message.postFail);
       }
@@ -106,6 +109,7 @@ export const resolvers: IResolvers = {
       }
 
       post.text = text;
+      post.updatedAt = new Date();
       const success = await post.save();
       if (!success) {
         return response(false, message.postNotUpdated);
