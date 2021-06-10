@@ -43,6 +43,8 @@ export const message = {
     'There is no user with this ID to send him/her a message!',
   messageSuccess: 'Message has been sent!',
   messageFail: 'Message has not been sent!',
+  cannotUpdateAvatarsPhotoAlbum:
+    'You cannot change the name of the Avatars photo album.',
 };
 
 export const uploadFile = async (createReadStream, pathName) => {

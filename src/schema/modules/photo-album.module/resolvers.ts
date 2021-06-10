@@ -1,6 +1,6 @@
 import { IResolvers } from 'graphql-tools';
 import { PhotoAlbum, User } from '../../../entity';
-import { response } from '../../../utils';
+import { response, message } from '../../../utils';
 import { unlink } from 'fs/promises';
 import * as path from 'path';
 
@@ -8,7 +8,7 @@ export const resolvers: IResolvers = {
   Query: {
     getPhotoAlbumsByUserId: async (_, { userId }) => {
       if (!userId) {
-        return response(false, 'Invalid user ID!');
+        return response(false, message.notAuthorized);
       }
 
       const user = await User.findOne({
@@ -16,7 +16,7 @@ export const resolvers: IResolvers = {
         relations: ['photoAlbums'],
       });
       if (!user) {
-        return response(false, 'There is no user with this ID!');
+        return response(false, message.invalidUserId);
       }
 
       return user.photoAlbums.sort((a, b) => b.id - a.id);
@@ -25,12 +25,12 @@ export const resolvers: IResolvers = {
   Mutation: {
     createPhotoAlbum: async (_, { title, description }, { req }) => {
       if (!req.userId) {
-        return response(false, 'The user is not authorized!');
+        return response(false, message.notAuthorized);
       }
 
       const user = await User.findOne(req.userId);
       if (!user) {
-        return response(false, 'There is no user with this ID!');
+        return response(false, message.invalidUserId);
       }
 
       const photoAlbum = await PhotoAlbum.create({
@@ -53,29 +53,23 @@ export const resolvers: IResolvers = {
       { req }
     ) => {
       if (!req.userId) {
-        return response(false, 'The user is not authorized!');
+        return response(false, message.notAuthorized);
       }
 
       const user = await User.findOne(req.userId);
       if (!user) {
-        return response(false, 'There is no user with this ID!');
+        return response(false, message.invalidUserId);
       }
 
       const photoAlbum = await PhotoAlbum.findOne({
         where: { id: photoAlbumId, user },
       });
       if (!photoAlbum) {
-        return response(
-          false,
-          'There is no photo album with this ID or you do not own it!'
-        );
+        return response(false, message.invalidPhotoAlbumOrUserId);
       }
 
       if (photoAlbum.title === 'Avatars') {
-        return response(
-          false,
-          'You cannot change the name of the Avatars photo album.'
-        );
+        return response(false, message.cannotUpdateAvatarsPhotoAlbum);
       }
 
       if (title) {
@@ -94,7 +88,7 @@ export const resolvers: IResolvers = {
     },
     removePhotoAlbum: async (_, { photoAlbumId }, { req }) => {
       if (!req.userId) {
-        return response(false, 'The user is not authorized!');
+        return response(false, message.notAuthorized);
       }
 
       const user = await User.findOne({
@@ -102,7 +96,7 @@ export const resolvers: IResolvers = {
         relations: ['photoAlbums'],
       });
       if (!user) {
-        return response(false, 'There is no user with this ID!');
+        return response(false, message.invalidUserId);
       }
 
       const photoAlbum = await PhotoAlbum.findOne({
@@ -110,10 +104,7 @@ export const resolvers: IResolvers = {
         relations: ['photos'],
       });
       if (!photoAlbum) {
-        return response(
-          false,
-          'There is no photo album with this ID or you do not own it!'
-        );
+        return response(false, message.invalidPhotoAlbumOrUserId);
       }
 
       const title = photoAlbum.title;
