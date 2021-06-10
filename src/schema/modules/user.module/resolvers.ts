@@ -19,6 +19,9 @@ export const resolvers: IResolvers = {
         return null;
       }
 
+      user.lastVisit = new Date();
+      await user.save();
+
       recalculateKarmaTo(user);
 
       return user;

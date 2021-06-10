@@ -53,6 +53,14 @@ export class User extends BaseEntity {
   @Column('float', { default: 0 })
   karma: number;
 
+  @Column({
+    name: 'last_visit',
+    type: 'timestamptz',
+    nullable: true,
+    default: null,
+  })
+  lastVisit: Date;
+
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 

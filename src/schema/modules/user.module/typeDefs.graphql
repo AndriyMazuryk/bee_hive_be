@@ -9,6 +9,7 @@ type User {
   location: String!
   birthDate: String!
   userInfo: String!
+  lastVisit: Date
   createdAt: String!
   updatedAt: String
   avatar: Photo
